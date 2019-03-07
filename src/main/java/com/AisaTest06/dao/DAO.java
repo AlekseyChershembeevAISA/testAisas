@@ -203,28 +203,6 @@ public class DAO {
         return listCompanies;
     }
 
-    //@Override
-    //    public List<Company> findAll(String filter) {
-    //        logger.info("findAll() SELECT id, name_company, itn, address, phone FROM company");
-    //        try {
-    //            String filter_pattern = "%" + filter + "%";
-    //            MapSqlParameterSource paramMap = new MapSqlParameterSource();
-    //            paramMap.addValue("filter", filter_pattern);
-    //            return namedParameterJdbcTemplate.query(FILTER_QUERY, paramMap,
-    //                    (rs, rowNum) -> {
-    //                        Company company = new Company();
-    //                        company.setId(Long.valueOf(rs.getString("id")));
-    //                        company.setNameCompany(rs.getString("name_company"));
-    //                        company.setITN(rs.getString("itn"));
-    //                        company.setAddress(rs.getString("address"));
-    //                        company.setPhone(rs.getString("phone"));
-    //                        return company;
-    //                    });
-    //        } catch (DataAccessException e) {
-    //            logger.warn("Возникли какие-то проблемы");
-    //            return null;
-    //        }
-    //    }
 
     public List<Company>searchAllCompanies(String search){
         List<Company> listCompanies;
@@ -254,11 +232,27 @@ public class DAO {
         }
 
     }
-
+//проверить еще раз
     public List<Employee>searchAllEmployees(String search){
-        List<Employee>listEmployee = new ArrayList<>();
+        List<Employee>listEmployee ;
         try {
-            //написать фильтр
+            String sql = "select * from employees";
+            String searchUse = "%"+search+"%";
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            parameters.addValue("search",searchUse);
+            listEmployee = jdbcTemplate.query(sql,parameters,((resultSet, i) -> {
+                Employee employee = new Employee();
+                employee.setEmployeeId(employee.getEmployeeId());
+                employee.setCompanyId(employee.getEmployeeId());
+                employee.setBirthDate(employee.getBirthDate());
+                employee.setEmail(employee.getEmail());
+                employee.setFullname(employee.getFullname());
+
+                return employee;
+
+
+            }));
+
             return listEmployee;
         }catch (DataAccessException d){
             System.out.println(d);

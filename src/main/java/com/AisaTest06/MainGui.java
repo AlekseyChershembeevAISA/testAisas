@@ -106,19 +106,7 @@ public class MainGui extends UI {
 
 
                         //прикрутить сюда фильтр из базы на компанию
-                        // searchTextField.addValueChangeListener(event -> {
-                        //            if (tabsheet.getSelectedTab().equals(personTab)) {
-                        //                peopleForm.getDataPersonProvider().getItems().clear();
-                        //                peopleForm.getDataPersonProvider().getItems().addAll(personDao.findAll(event.getValue()));
-                        //                peopleForm.getDataPersonProvider().refreshAll();
-                        //            } else if (tabsheet.getSelectedTab().equals(companyTab)) {
-                        //                companyForm.getDataCompanyProvider().getItems().clear();
-                        //                companyForm.getDataCompanyProvider().getItems().addAll(companyDao.findAll(event.getValue()));
-                        //                companyForm.getDataCompanyProvider().refreshAll();
-                        //            }
-                        //        });
-                        //        return this;
-                        //    }
+
 
                         if (!search.getValue().equals("")) {
                             search.addValueChangeListener(event -> {
