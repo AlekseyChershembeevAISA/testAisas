@@ -227,22 +227,21 @@ public class DAO {
     //    }
 
     public List<Company>searchAllCompanies(String search){
-        List<Company> listCompanies = new ArrayList<>();
+        List<Company> listCompanies;
         try {
             String sql = "SELECT * FROM COMPANIES";
             String searchUse = "%" + search + "%";
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             parameters.addValue("search",searchUse);
-//            listCompanies = jdbcTemplate.query(sql,parameters,((resultSet, i) -> {
-//                Company company = new Company();
-//                company.setCompanyId(company.getCompanyId());
-//                company.setName(company.getName());
-//                company.setAddress(company.getAddress());
-//                company.setNip(company.getNip());
-//                company.setPhone(company.getPhone());
-//            }));
-
-            //написать фильтр
+            listCompanies = jdbcTemplate.query(sql,parameters,((resultSet, i) -> {
+                Company company = new Company();
+                company.setCompanyId(company.getCompanyId());
+                company.setName(company.getName());
+                company.setAddress(company.getAddress());
+                company.setNip(company.getNip());
+                company.setPhone(company.getPhone());
+                return company;
+            }));
 
 
 

@@ -104,6 +104,7 @@ public class MainGui extends UI {
                 (TabSheet.SelectedTabChangeListener) e -> {
                     if (tabSheet.getSelectedTab().equals(tab1)) {
 
+
                         //прикрутить сюда фильтр из базы на компанию
                         // searchTextField.addValueChangeListener(event -> {
                         //            if (tabsheet.getSelectedTab().equals(personTab)) {
