@@ -1,5 +1,7 @@
 package com.AisaTest06.model;
 
+import java.util.Objects;
+
 public class Company {
     private int companyId;
     private String name;
@@ -28,6 +30,23 @@ public class Company {
         this.nip = nip;
         this.address = address;
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return companyId == company.companyId &&
+                nip == company.nip &&
+                phone == company.phone &&
+                Objects.equals(name, company.name) &&
+                Objects.equals(address, company.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(companyId, name, nip, address, phone);
     }
 
     @Override

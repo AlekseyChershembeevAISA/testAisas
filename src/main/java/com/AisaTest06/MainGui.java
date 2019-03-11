@@ -6,21 +6,23 @@ import com.AisaTest06.model.Employee;
 import com.AisaTest06.view.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.server.*;
 import com.vaadin.ui.*;
 
 import javax.servlet.annotation.WebServlet;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Theme("mytheme")
 
 
 public class MainGui extends UI {
 
-
+    private static Logger logger = Logger.getLogger(MainGui.class.getName());
 
 
     @Override
@@ -91,53 +93,95 @@ public class MainGui extends UI {
         mainLayout.addComponent(companyGrid);
         setContent(mainLayout);
 
+        TextField name = new TextField("Название компании");
+        TextField nip = new TextField("ИНН");
+        TextField address = new TextField("Адрес");
+        TextField phone = new TextField("телефон");
+
         search.addValueChangeListener(e ->{
             if (tabSheet.getSelectedTab().equals(tab1)){
                 companyGrid.setItems(dao.searchAllCompanies(search.getValue()));
                 mainLayout.addComponent(companyGrid);
                 mainLayout.removeComponent(employeeGrid);
-
-
+                logger.info("Выбран tab1 с search "+ search.getValue());
             }
             else if (tabSheet.getSelectedTab().equals(tab2)){
                 employeeGrid.setItems(dao.searchAllEmployees(search.getValue()));
                 mainLayout.addComponent(employeeGrid);
                 mainLayout.removeComponent(companyGrid);
+                logger.info("Выбран tab2 с search "+ search.getValue());
             }
         }) ;
 
         selectAllEmployees.addValueChangeListener(event -> {
             Employee employee = event.getValue();
             employeeIdArr[0] = employee.getEmployeeId();
+            logger.info("Выбран сотрудник в combobox "+employee.getFullname());
+
         });
 
         selectAllCompanies.addValueChangeListener(event -> {
             Company company = event.getValue();
             CompanyIdArr[0] = company.getCompanyId();
+            logger.info("Выбрана компания в combobox "+company.getName());
         });
 
         tabSheet.addSelectedTabChangeListener(
                 (TabSheet.SelectedTabChangeListener) e -> {
                     if (tabSheet.getSelectedTab().equals(tab1)) {
-                                companyGrid.setItems(dao.selectAllCompanies());
-                                mainLayout.addComponent(companyGrid);
-                                mainLayout.removeComponent(employeeGrid);
+                        companyGrid.setItems(dao.selectAllCompanies());
+                        mainLayout.addComponent(companyGrid);
+                        mainLayout.removeComponent(employeeGrid);
+
+                        logger.info("Выбран tab1" );
+
                     } else if (tabSheet.getSelectedTab().equals(tab2)){
                         employeeGrid.setItems(dao.selectAllEmployees());
                         mainLayout.addComponent(employeeGrid);
                         mainLayout.removeComponent(companyGrid);
 
+                        logger.info("Выбран tab2");
 
                     }
                 });
+
+
+        nip.addValueChangeListener(event->{
+            if (event.getValue().length()!=12&&event.getValue().matches("[-+]?\\d+")){
+                nip.setComponentError(new UserError("Должно быть 12 цифр"));
+            }
+            else {
+                nip.setComponentError(null);
+                Notification.show(event.getValue());
+            }
+        });
+
+        phone.addValueChangeListener(event->{
+            if (event.getValue().matches("\\d")){
+                phone.setComponentError(new UserError("Должны быть цифры"));
+            }
+            else {
+                phone.setComponentError(null);
+                Notification.show(event.getValue());
+            }
+        });
+
+
+
+
         addButton.addClickListener(clickEvent -> {
+
+
+
             if (tabSheet.getSelectedTab().equals(tab1)) {
+
                 AddCompany addComWindow = new AddCompany();
-                TextField name = new TextField("Название компании");
-                TextField nip = new TextField("ИНН");
-                TextField address = new TextField("Адрес");
-                TextField phone = new TextField("телефон");
+
                 Button addCompany = new Button("Добавить компанию");
+
+
+
+
 
                 events(companyNameArr, NIPArr, AddressArr, PhoneArr, name, nip, address, phone);
 
@@ -146,11 +190,20 @@ public class MainGui extends UI {
                     addComWindow.close();
                     mainWindowLayout.removeAllComponents();
                     tabSheet.setSelectedTab(tab2);
-                    Company company = new Company(companyNameArr[0], Long.parseLong(NIPArr[0])
+                    Company company = null;
+                    try {
+
+
+                    company= new Company(companyNameArr[0], Long.parseLong(NIPArr[0])
                             , AddressArr[0], Long.parseLong(PhoneArr[0]));
 
+                    }
+                    catch (NumberFormatException ex){
+                       logger.warning("Неверные данные компании "+ ex);
+                    }
                     if (companyNameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
                             AddressArr[0].isEmpty() || PhoneArr[0].isEmpty()) {
+
                         Notification.show("Ошибка " + fullNameArr[0] );
 
                     } else {
@@ -164,14 +217,20 @@ public class MainGui extends UI {
                 addComWindow.addCloseListener((Window.CloseListener)
                         closeEvent -> mainWindowLayout.removeAllComponents());
 
+
                 addComWindow.setContent(mainWindowLayout);
                 addWindow(addComWindow);
             } else if (tabSheet.getSelectedTab().equals(tab2)) {
+
+
                 AddEmployee additionWindow = new AddEmployee();
                 TextField fullName = new TextField("ФИО");
                 DateField dateField = new DateField("Дата рождения");
                 TextField email = new TextField("Email");
                 Button addEmployee = new Button("Добавить сотрудника");
+
+
+
 
                 fullName.setRequiredIndicatorVisible(true);
                 dateField.setRequiredIndicatorVisible(true);
@@ -286,10 +345,7 @@ public class MainGui extends UI {
         editButton.addClickListener((Button.ClickListener) clickEvent -> {
             if (tabSheet.getSelectedTab().equals(tab1)) {
                 EditCompany editComWindow = new EditCompany();
-                TextField name = new TextField("Название компании");
-                TextField nip = new TextField("ИНН");
-                TextField address = new TextField("Адрес");
-                TextField phone = new TextField("Телефон");
+
                 Button editCompany = new Button("Редактировать компанию");
 
                 events(companyNameArr, NIPArr, AddressArr, PhoneArr, name, nip, address, phone);
@@ -307,8 +363,16 @@ public class MainGui extends UI {
                     editComWindow.close();
                     mainWindowLayout.removeAllComponents();
                     tabSheet.setSelectedTab(tab2);
-                    Company company = new Company(CompanyIdArr[0], companyNameArr[0], Long.parseLong(NIPArr[0])
+
+                    Company company = null;
+                    try {
+
+                    company= new Company(CompanyIdArr[0], companyNameArr[0], Long.parseLong(NIPArr[0])
                             , AddressArr[0], Long.parseLong(PhoneArr[0]));
+                    }
+                    catch (NumberFormatException ex){
+                        logger.warning("Неверная редакция компании "+ ex);
+                    }
 
                     if (companyNameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
                             AddressArr[0].isEmpty() || PhoneArr[0].isEmpty()) {
@@ -367,15 +431,22 @@ public class MainGui extends UI {
                     editWindow.close();
                     mainWindowLayout.removeAllComponents();
                     tabSheet.setSelectedTab(tab1);
-                    Employee employee = new Employee(
-                            employeeIdArr[0], textFieldNameArr[0], dateArr[0], emailArr[0], CompanyIdArr[0]);
+                    Employee employee =null;
+                    try {
+                        employee = new Employee(
+                                employeeIdArr[0], textFieldNameArr[0], dateArr[0], emailArr[0], CompanyIdArr[0]);
+                    }
+                    catch (NumberFormatException ex){
+                        logger.warning("Неверная редакция сотрудника "+ ex);
+                    }
+
 
                     if (textFieldNameArr[0].isEmpty() || dateArr[0].isEmpty() || emailArr[0].isEmpty()) {
                         Notification.show("Ошибка " + employeeIdArr[0] );
 
                     } else {
                         dao.editEmployee(employee);
-                        Notification.show(employeeIdArr[0] + "Ок");
+                        Notification.show(employeeIdArr[0] + " Ок");
 
                     }
                 });

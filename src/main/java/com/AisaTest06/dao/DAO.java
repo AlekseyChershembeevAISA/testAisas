@@ -10,9 +10,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 public class DAO {
+
+    private static Logger logger = Logger.getLogger(DAO.class.getName());
+
 
 
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -27,9 +31,10 @@ public class DAO {
             ds.setPassword("123");
 
             jdbcTemplate = new NamedParameterJdbcTemplate(ds);
+            logger.info("Успешное подключение к базе даных " + ds.getUrl());
 
         } catch (DataAccessException d){
-            System.out.println(d);
+            logger.warning("Ошибка подключения к базе данных "+ d);
         }
         return ds;
     }
@@ -43,10 +48,11 @@ public class DAO {
 
         try {
             edit(employee, sql, parameters);
+            logger.info("Успешно добавлен новый сотрудник "+employee.getFullname());
 
 
         } catch (DataAccessException d) {
-            System.out.println(d);
+            logger.warning("Ошибка при добавлении нового сотрудника " +d);
         }
 
         return employee;
@@ -67,10 +73,11 @@ public class DAO {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         try {
             edit(company, sql, parameters);
+            logger.info("Успешно добавлена новая компания "+ company.getCompanyId()+ " "+company.getName());
 
 
         } catch (DataAccessException d) {
-            System.out.println(d);
+           logger.warning("Ошибка при добавлении новой компании "+ d);
         }
 
         return company;
@@ -97,10 +104,11 @@ public class DAO {
         try {
             parameters.addValue("employeeid",employee.getEmployeeId());
             edit(employee, sql, parameters);
+            logger.info("Успешно изменен сотрудник "+ employee.getEmployeeId()+" "+employee.getFullname());
 
 
         } catch (DataAccessException d) {
-            System.out.println(d);
+           logger.warning("Ошибка при изменении сотрудника "+ d);
         }
 
         return employee;
@@ -118,9 +126,12 @@ public class DAO {
         try {
             parameters.addValue("companyid",company.getCompanyId());
             edit(company, sql, parameters);
+            logger.info("Успешно изменена компания "+ company.getCompanyId()+" "+ company.getName());
 
-        } catch (DataAccessException d) {
-            System.out.println(d);
+        } catch (NullPointerException ex){
+            logger.warning("Ошибка ввода companyid "+ ex);
+        } catch(DataAccessException d) {
+            System.out.println("Ошибка при изменении компании "+d);
         }
 
         return company;
@@ -137,10 +148,10 @@ public class DAO {
 
             result = jdbcTemplate.update(sql, parameters);
 
-
+            logger.info("Успешно удален сотрудник "+ employee.getEmployeeId()+" "+ employee.getFullname());
             return result;
         } catch (DataAccessException d){
-            System.out.println(d);
+            logger.warning("Ошибка при удалении сотрудника "+ d);
         }
 
         return employee.getEmployeeId();
@@ -157,10 +168,11 @@ public class DAO {
 
             result = jdbcTemplate.update(sql,parameters);
 
+            logger.info("Успешно удалена компания "+ company.getCompanyId()+ " "+ company.getName());
 
             return result;
         } catch (DataAccessException d) {
-            System.out.println(d);
+            logger.warning("Ошибка при удалении компании "+d);
         }
 
         return company.getCompanyId();
@@ -173,10 +185,10 @@ public class DAO {
 
         try {
             listAllEmployees = jdbcTemplate.query(sql, new EmployeeRowMapper());
-
+            logger.info("Успешно добавлены все сотрудники ");
 
         } catch (DataAccessException d) {
-            System.out.println(d);
+            logger.warning("Ошибка при добавлении сотрудников "+ d);
         }
 
         return listAllEmployees;
@@ -189,11 +201,12 @@ public class DAO {
 
         try {
             listCompanies = jdbcTemplate.query(sql, new CompanyRowMapper());
+            logger.info("Успешно добавлены все компании ");
 
 
 
         } catch (DataAccessException d) {
-            System.out.println(d);
+            logger.warning("Ошибка при добавлении компаний "+ d);
         }
 
         return listCompanies;
@@ -205,6 +218,7 @@ public class DAO {
         try {
             if (!search.equals(""))
            {
+
 
                sql = "select*from companies where " +
                        "name like " +
@@ -222,6 +236,7 @@ public class DAO {
                company.setNip(company.getNip());
                company.setPhone(company.getPhone());
                listCompanies = jdbcTemplate.query(sql,new CompanyRowMapper());
+               logger.info("Успешно найдены искомые компании по строке "+ search);
                return listCompanies;
             }
             else {
@@ -230,7 +245,7 @@ public class DAO {
             }
         }
         catch (DataAccessException d){
-            System.out.println(d);
+           logger.warning("Ошибка при поиске компании по строке "+d);
             return null;
         }
     }
@@ -258,6 +273,7 @@ public class DAO {
                 employee.setCompanyId(employee.getCompanyId());
 
                 listEmployee= jdbcTemplate.query(sql,new EmployeeRowMapper());
+                logger.info("Успешно найдены искомые сотрудники по строке "+ search);
                 return listEmployee;
             }
             else {
@@ -267,7 +283,7 @@ public class DAO {
 
         }
         catch (DataAccessException d){
-            System.out.println(d);
+            logger.warning("Ошибка при поиске сотрудника по строке "+d);
             return null;
         }
     }

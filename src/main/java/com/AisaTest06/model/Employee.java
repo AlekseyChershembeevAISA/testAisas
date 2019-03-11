@@ -1,5 +1,7 @@
 package com.AisaTest06.model;
 
+import java.util.Objects;
+
 public class Employee {
     private int employeeId;
     private String fullname;
@@ -19,7 +21,22 @@ public class Employee {
         this.companyId = companyId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return employeeId == employee.employeeId &&
+                companyId == employee.companyId &&
+                Objects.equals(fullname, employee.fullname) &&
+                Objects.equals(birthDate, employee.birthDate) &&
+                Objects.equals(email, employee.email);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeId, fullname, birthDate, email, companyId);
+    }
 
     public Employee(String fullname, String birthDate, String email, int companyId) {
         this.fullname = fullname;
