@@ -6,9 +6,7 @@ import com.AisaTest06.model.Employee;
 import com.AisaTest06.view.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.server.*;
 import com.vaadin.ui.*;
 
@@ -98,6 +96,10 @@ public class MainGui extends UI {
         TextField address = new TextField("Адрес");
         TextField phone = new TextField("телефон");
 
+        TextField fullName = new TextField("ФИО");
+        DateField dateField = new DateField("Дата рождения");
+        TextField email = new TextField("Email");
+
         search.addValueChangeListener(e ->{
             if (tabSheet.getSelectedTab().equals(tab1)){
                 companyGrid.setItems(dao.searchAllCompanies(search.getValue()));
@@ -147,7 +149,7 @@ public class MainGui extends UI {
 
 
         nip.addValueChangeListener(event->{
-            if (event.getValue().length()!=12&&event.getValue().matches("[-+]?\\d+")){
+            if (event.getValue().length()!=12&&event.getValue().matches("\\d+")){
                 nip.setComponentError(new UserError("Должно быть 12 цифр"));
             }
             else {
@@ -157,7 +159,7 @@ public class MainGui extends UI {
         });
 
         phone.addValueChangeListener(event->{
-            if (event.getValue().matches("\\d")){
+            if (!event.getValue().matches("\\d+")){
                 phone.setComponentError(new UserError("Должны быть цифры"));
             }
             else {
@@ -165,8 +167,19 @@ public class MainGui extends UI {
                 Notification.show(event.getValue());
             }
         });
+        email.addValueChangeListener(event->{
+             String EMAIL_PATTERN =
+                    "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                            "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+            if (!event.getValue().matches(EMAIL_PATTERN)){
+                email.setComponentError(new UserError("Нужен email"));
+            }
+            else {
+                email.setComponentError(null);
+                Notification.show(event.getValue());
+            }
 
-
+        });
 
 
         addButton.addClickListener(clickEvent -> {
@@ -179,10 +192,6 @@ public class MainGui extends UI {
 
                 Button addCompany = new Button("Добавить компанию");
 
-
-
-
-
                 events(companyNameArr, NIPArr, AddressArr, PhoneArr, name, nip, address, phone);
 
                 addCompany.addClickListener((Button.ClickListener) clickEvent6 -> {
@@ -192,7 +201,6 @@ public class MainGui extends UI {
                     tabSheet.setSelectedTab(tab2);
                     Company company = null;
                     try {
-
 
                     company= new Company(companyNameArr[0], Long.parseLong(NIPArr[0])
                             , AddressArr[0], Long.parseLong(PhoneArr[0]));
@@ -209,7 +217,6 @@ public class MainGui extends UI {
                     } else {
                         dao.insertCompany(company);
                         Notification.show(companyNameArr[0] + "Ок");
-
                     }
                 });
 
@@ -224,13 +231,8 @@ public class MainGui extends UI {
 
 
                 AddEmployee additionWindow = new AddEmployee();
-                TextField fullName = new TextField("ФИО");
-                DateField dateField = new DateField("Дата рождения");
-                TextField email = new TextField("Email");
+
                 Button addEmployee = new Button("Добавить сотрудника");
-
-
-
 
                 fullName.setRequiredIndicatorVisible(true);
                 dateField.setRequiredIndicatorVisible(true);
@@ -391,9 +393,7 @@ public class MainGui extends UI {
 
             } else if (tabSheet.getSelectedTab().equals(tab2)) {
                 EditEmployee editWindow = new EditEmployee();
-                TextField fullName = new TextField("ФИО");
-                DateField dateField = new DateField("Дата Рождения");
-                TextField email = new TextField("Email");
+
                 Button editEmployee = new Button("Редактировать сотрудника");
 
                 fullName.setRequiredIndicatorVisible(true);
