@@ -28,7 +28,6 @@ public class DAO {
 
             jdbcTemplate = new NamedParameterJdbcTemplate(ds);
 
-
         } catch (DataAccessException d){
             System.out.println(d);
         }
@@ -39,8 +38,6 @@ public class DAO {
     public Employee insertEmployee(Employee employee) {
         String sql = "INSERT INTO EMPLOYEES (fullName, birthDate, email, companyid) " +
                 "VALUES(:fullname,:birthdate,:email,:companyid)";
-
-
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
 
@@ -63,7 +60,6 @@ public class DAO {
 
         jdbcTemplate.update(sql, parameters);
     }
-
 
     public Company insertCompany(Company company){
         String sql = "INSERT INTO COMPANIES (name,nip,address,phone)" +
@@ -203,58 +199,74 @@ public class DAO {
         return listCompanies;
     }
 
-
     public List<Company>searchAllCompanies(String search){
         List<Company> listCompanies;
+        String sql;
         try {
-            String sql = "SELECT * FROM COMPANIES";
-            String searchUse = "%" + search + "%";
-            MapSqlParameterSource parameters = new MapSqlParameterSource();
-            parameters.addValue("search",searchUse);
-            listCompanies = jdbcTemplate.query(sql,parameters,((resultSet, i) -> {
-                Company company = new Company();
-                company.setCompanyId(company.getCompanyId());
-                company.setName(company.getName());
-                company.setAddress(company.getAddress());
-                company.setNip(company.getNip());
-                company.setPhone(company.getPhone());
-                return company;
-            }));
+            if (!search.equals(""))
+           {
 
-
-
-            return listCompanies;
-
+               sql = "select*from companies where " +
+                       "name like " +
+                       "" +"'%" + search + "%' " +
+                       "or cast(nip as varchar) like " +
+                       "" +"'%" + search + "%' " +
+                       "or address like " +
+                       "" +"'%" + search + "%' " +
+                       "or cast (phone as varchar) like " +
+                       "" +"'%" + search + "%'";
+               Company company = new Company();
+               company.setCompanyId(company.getCompanyId());
+               company.setName(company.getName());
+               company.setAddress(company.getAddress());
+               company.setNip(company.getNip());
+               company.setPhone(company.getPhone());
+               listCompanies = jdbcTemplate.query(sql,new CompanyRowMapper());
+               return listCompanies;
+            }
+            else {
+               listCompanies =selectAllCompanies();
+               return listCompanies;
+            }
         }
         catch (DataAccessException d){
             System.out.println(d);
             return null;
         }
-
     }
-//проверить еще раз
+
     public List<Employee>searchAllEmployees(String search){
-        List<Employee>listEmployee ;
+        List<Employee> listEmployee;
+        String sql;
+
         try {
-            String sql = "select * from employees";
-            String searchUse = "%"+search+"%";
-            MapSqlParameterSource parameters = new MapSqlParameterSource();
-            parameters.addValue("search",searchUse);
-            listEmployee = jdbcTemplate.query(sql,parameters,((resultSet, i) -> {
+            if (!search.equals(""))
+            {
+                sql = "select*from employees where " +
+                        "fullname like " +
+                        "" +"'%" + search + "%' " +
+                        "or birthdate like " +
+                        "" +"'%" + search + "%' " +
+                        "or email like " +
+                        "" +"'%" + search + "%' ";
+
                 Employee employee = new Employee();
                 employee.setEmployeeId(employee.getEmployeeId());
-                employee.setCompanyId(employee.getEmployeeId());
-                employee.setBirthDate(employee.getBirthDate());
-                employee.setEmail(employee.getEmail());
                 employee.setFullname(employee.getFullname());
+                employee.setEmail(employee.getEmail());
+                employee.setBirthDate(employee.getBirthDate());
+                employee.setCompanyId(employee.getCompanyId());
 
-                return employee;
+                listEmployee= jdbcTemplate.query(sql,new EmployeeRowMapper());
+                return listEmployee;
+            }
+            else {
+                listEmployee =selectAllEmployees();
+                return listEmployee;
+            }
 
-
-            }));
-
-            return listEmployee;
-        }catch (DataAccessException d){
+        }
+        catch (DataAccessException d){
             System.out.println(d);
             return null;
         }

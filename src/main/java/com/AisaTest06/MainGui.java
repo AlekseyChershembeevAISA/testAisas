@@ -7,9 +7,8 @@ import com.AisaTest06.view.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.HasValue;
-import com.vaadin.server.Page;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
 
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +22,7 @@ public class MainGui extends UI {
 
 
 
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         Grids grids = new Grids();
@@ -33,6 +33,7 @@ public class MainGui extends UI {
         DAO dao = new DAO();
 
         dao.dataSource();
+
 
         VerticalLayout mainLayout = new VerticalLayout();
         HorizontalLayout headLayout = new HorizontalLayout();
@@ -62,6 +63,7 @@ public class MainGui extends UI {
         employeeGrid.setSizeFull();
         companyGrid.setSizeFull();
 
+
         ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
         ComboBox<Employee> selectAllEmployees = new ComboBox<>("Выбрать сотрудника");
 
@@ -81,7 +83,6 @@ public class MainGui extends UI {
         final String[] NIPArr = {""};
         final String[] AddressArr = {""};
         final String[] PhoneArr = {""};
-        final String[] Searches = {""};
 
         headLayout.addComponents(addButton, editButton, deleteButton, search);
         mainLayout.addComponent(headLayout);
@@ -89,6 +90,21 @@ public class MainGui extends UI {
         companyGrid.setItems(dao.selectAllCompanies());
         mainLayout.addComponent(companyGrid);
         setContent(mainLayout);
+
+        search.addValueChangeListener(e ->{
+            if (tabSheet.getSelectedTab().equals(tab1)){
+                companyGrid.setItems(dao.searchAllCompanies(search.getValue()));
+                mainLayout.addComponent(companyGrid);
+                mainLayout.removeComponent(employeeGrid);
+
+
+            }
+            else if (tabSheet.getSelectedTab().equals(tab2)){
+                employeeGrid.setItems(dao.searchAllEmployees(search.getValue()));
+                mainLayout.addComponent(employeeGrid);
+                mainLayout.removeComponent(companyGrid);
+            }
+        }) ;
 
         selectAllEmployees.addValueChangeListener(event -> {
             Employee employee = event.getValue();
@@ -103,26 +119,10 @@ public class MainGui extends UI {
         tabSheet.addSelectedTabChangeListener(
                 (TabSheet.SelectedTabChangeListener) e -> {
                     if (tabSheet.getSelectedTab().equals(tab1)) {
-
-
-                        //прикрутить сюда фильтр из базы на компанию
-
-
-                        if (!search.getValue().equals("")) {
-                            search.addValueChangeListener(event -> {
-
-                            });
-                        }
-                        else {
-
-                            companyGrid.setItems(dao.selectAllCompanies());
-                            mainLayout.addComponent(companyGrid);
-                            mainLayout.removeComponent(employeeGrid);
-                        }
-
-
-                    } else {
-                        //сюда прикрутить фильтр на работников
+                                companyGrid.setItems(dao.selectAllCompanies());
+                                mainLayout.addComponent(companyGrid);
+                                mainLayout.removeComponent(employeeGrid);
+                    } else if (tabSheet.getSelectedTab().equals(tab2)){
                         employeeGrid.setItems(dao.selectAllEmployees());
                         mainLayout.addComponent(employeeGrid);
                         mainLayout.removeComponent(companyGrid);
@@ -130,8 +130,6 @@ public class MainGui extends UI {
 
                     }
                 });
-
-
         addButton.addClickListener(clickEvent -> {
             if (tabSheet.getSelectedTab().equals(tab1)) {
                 AddCompany addComWindow = new AddCompany();
@@ -388,7 +386,9 @@ public class MainGui extends UI {
         });
     }
 
-    private void events(String[] companyNameArr, String[] NIPArr, String[] addressArr, String[] phoneArr, TextField name, TextField nip, TextField address, TextField phone) {
+    private void events(String[] companyNameArr, String[] NIPArr, String[] addressArr, String[] phoneArr,
+                        TextField name, TextField nip, TextField address, TextField phone) {
+
         name.setRequiredIndicatorVisible(true);
         nip.setRequiredIndicatorVisible(true);
         address.setRequiredIndicatorVisible(true);

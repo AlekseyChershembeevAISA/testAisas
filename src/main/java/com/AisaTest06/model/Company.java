@@ -11,7 +11,7 @@ public class Company {
 
     }
 
-    public Company(String name){ this.name = name; }
+
 
     public Company(int companyId) {
         this.companyId = companyId;
