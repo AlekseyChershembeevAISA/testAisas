@@ -255,13 +255,11 @@ public class MainGui extends UI {
                     tabSheet.setSelectedTab(tab2);
                     Employee employee = new Employee(fullNameArr[0], dateArr[0]
                             , emailArr[0], CompanyIdArr[0]);
-                    if
-                    (dao.checkEmployeeByName(employee.getFullname())){
-                        logger.warning("Такой сотрудник уже существет "+ employee.getFullname());
-                        employee.setFullname("");
-                    }
-                    else if (fullNameArr[0].isEmpty() || dateArr[0].isEmpty() || emailArr[0].isEmpty()) {
+
+                   if (fullNameArr[0].isEmpty() || dateArr[0].isEmpty() || emailArr[0].isEmpty()) {
                         Notification.show("Ошибка " + fullNameArr[0] );
+
+                        logger.warning("Необходимо заполнить пустые поля "+employee.toString());
                     }
                     else {
                         dao.insertEmployee(employee);
@@ -466,7 +464,7 @@ public class MainGui extends UI {
 
 
     }
-
+    //метод для заполнения полей сотрудника
     private void events(TextField fullName,DateField dateField,TextField email,
                         String [] fullNameArr,String [] dateArr,String [] emailArr){
         fullName.setRequiredIndicatorVisible(true);

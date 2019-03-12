@@ -293,7 +293,7 @@ public class DAO implements DAOi{
 
         MapSqlParameterSource parametres = new MapSqlParameterSource();
         parametres.addValue("name",name);
-//"";
+
         try {
             String sql = "select count(name) from companies where name = :name";
 
@@ -314,30 +314,7 @@ public class DAO implements DAOi{
         }
 
     }
-        @Override
-    public boolean checkEmployeeByName(String fullName){
 
-        MapSqlParameterSource parametres = new MapSqlParameterSource();
-
-        parametres.addValue("fullName",fullName);
-
-        try {
-            String sql = "SELECT count(fullname) from employees where fullname = :fullname";
-
-
-            Integer count = jdbcTemplate.queryForObject(sql,parametres,Integer.class);
-
-            if (count>0){
-            return  true;}
-            else {return false;}
-
-        }
-        catch (DataAccessException ex){
-            logger.warning("Ошибка при проверке сотрудника по имени "+ ex);
-            return false;
-        }
-
-    }
 
 
 

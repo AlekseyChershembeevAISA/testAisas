@@ -25,5 +25,5 @@ public interface DAOi {
      List<Employee>searchAllEmployees(String search);
 
      boolean checkCompanyByName(String name);
-     boolean checkEmployeeByName(String fullName);
+
 }
