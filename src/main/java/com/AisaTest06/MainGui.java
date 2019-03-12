@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class MainGui extends UI {
 
     private static Logger logger = Logger.getLogger(MainGui.class.getName());
+    DAO dao = new DAO();
 
 
     @Override
@@ -30,7 +31,6 @@ public class MainGui extends UI {
         UpButtons upButton = new UpButtons();
 
 
-        DAO dao = new DAO();
 
         dao.dataSource();
 
@@ -184,8 +184,6 @@ public class MainGui extends UI {
 
         addButton.addClickListener(clickEvent -> {
 
-
-
             if (tabSheet.getSelectedTab().equals(tab1)) {
 
                 AddCompany addComWindow = new AddCompany();
@@ -267,7 +265,7 @@ public class MainGui extends UI {
                     Page.getCurrent().reload();
                     additionWindow.close();
                     mainWindowLayout.removeAllComponents();
-                    tabSheet.setSelectedTab(tab1);
+                    tabSheet.setSelectedTab(tab2);
                     Employee employee = new Employee(fullNameArr[0], dateArr[0]
                             , emailArr[0], CompanyIdArr[0]);
 
@@ -306,9 +304,8 @@ public class MainGui extends UI {
                     mainWindowLayout.removeAllComponents();
                     tabSheet.setSelectedTab(tab2);
                     Company company = new Company(CompanyIdArr[0]);
-                    dao.deleteCompnay(company);
+                    dao.deleteCompany(company);
                     Notification.show(CompanyIdArr[0] + "Ок");
-
 
                 });
 
@@ -383,7 +380,6 @@ public class MainGui extends UI {
                     } else {
                         dao.editCompany(company);
                         Notification.show(CompanyIdArr[0] + "Ок");
-
                     }
                 });
 
@@ -447,7 +443,6 @@ public class MainGui extends UI {
                     } else {
                         dao.editEmployee(employee);
                         Notification.show(employeeIdArr[0] + " Ок");
-
                     }
                 });
 
@@ -465,8 +460,17 @@ public class MainGui extends UI {
         address.setRequiredIndicatorVisible(true);
         phone.setRequiredIndicatorVisible(true);
 
+        if (!dao.checkCompanyByName(companyNameArr[0])){
+
+
+
         name.addValueChangeListener(valueChangeEvent ->
-                companyNameArr[0] = valueChangeEvent.getValue());
+
+                companyNameArr[0] = valueChangeEvent.getValue()
+
+        );
+
+
 
         nip.addValueChangeListener(valueChangeEvent ->
                 NIPArr[0] = valueChangeEvent.getValue());
@@ -476,6 +480,8 @@ public class MainGui extends UI {
 
         phone.addValueChangeListener(valueChangeEvent ->
                 phoneArr[0] = valueChangeEvent.getValue());
+        }
+
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

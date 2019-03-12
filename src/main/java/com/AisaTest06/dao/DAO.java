@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
-public class DAO {
+public class DAO implements DAOi{
 
     private static Logger logger = Logger.getLogger(DAO.class.getName());
 
 
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-
+        @Override
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
 
@@ -39,7 +39,7 @@ public class DAO {
         return ds;
     }
 
-
+        @Override
     public Employee insertEmployee(Employee employee) {
         String sql = "INSERT INTO EMPLOYEES (fullName, birthDate, email, companyid) " +
                 "VALUES(:fullname,:birthdate,:email,:companyid)";
@@ -66,15 +66,15 @@ public class DAO {
 
         jdbcTemplate.update(sql, parameters);
     }
-
+        @Override
     public Company insertCompany(Company company){
         String sql = "INSERT INTO COMPANIES (name,nip,address,phone)" +
                 "VALUES(:name,:nip,:address,:phone) ";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         try {
+
             edit(company, sql, parameters);
             logger.info("Успешно добавлена новая компания "+ company.getCompanyId()+ " "+company.getName());
-
 
         } catch (DataAccessException d) {
            logger.warning("Ошибка при добавлении новой компании "+ d);
@@ -91,7 +91,7 @@ public class DAO {
 
         jdbcTemplate.update(sql,parameters);
     }
-
+        @Override
     public Employee editEmployee(Employee employee) {
         String sql = "UPDATE employees " +
                 "SET fullname=:fullname," +
@@ -114,7 +114,7 @@ public class DAO {
         return employee;
     }
 
-
+        @Override
     public Company editCompany(Company company) {
         String sql = "UPDATE companies " +
                 "SET name=:name,"+
@@ -137,7 +137,7 @@ public class DAO {
         return company;
     }
 
-
+        @Override
     public int deleteEmployee(Employee employee) {
         String sql = "DELETE FROM EMPLOYEES WHERE employeeid=:employeeid";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -157,8 +157,8 @@ public class DAO {
         return employee.getEmployeeId();
     }
 
-
-    public int deleteCompnay(Company company) {
+        @Override
+    public int deleteCompany(Company company) {
         String sql = "DELETE FROM COMPANIES WHERE companyid=:companyid";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         int result;
@@ -177,7 +177,7 @@ public class DAO {
 
         return company.getCompanyId();
     }
-
+        @Override
     public List<Employee> selectAllEmployees() {
         List<Employee> listAllEmployees = new ArrayList<>();
         String sql = "SELECT employees.employeeid,employees.fullname," +
@@ -194,7 +194,7 @@ public class DAO {
         return listAllEmployees;
     }
 
-
+        @Override
     public List<Company> selectAllCompanies() {
         List<Company> listCompanies = new ArrayList<>();
         String sql = "SELECT companyid,name,nip,address,phone FROM companies";
@@ -211,15 +211,13 @@ public class DAO {
 
         return listCompanies;
     }
-
+        @Override
     public List<Company>searchAllCompanies(String search){
         List<Company> listCompanies;
         String sql;
         try {
             if (!search.equals(""))
            {
-
-
                sql = "select*from companies where " +
                        "name like " +
                        "" +"'%" + search + "%' " +
@@ -249,7 +247,7 @@ public class DAO {
             return null;
         }
     }
-
+        @Override
     public List<Employee>searchAllEmployees(String search){
         List<Employee> listEmployee;
         String sql;
@@ -286,6 +284,55 @@ public class DAO {
             logger.warning("Ошибка при поиске сотрудника по строке "+d);
             return null;
         }
+    }
+
+
+
+        @Override
+    public boolean checkCompanyByName(String name){
+
+        MapSqlParameterSource parametres = new MapSqlParameterSource();
+        parametres.addValue("name",name);
+
+        try {
+            String sql = "select name from companies where name = " +
+                    name;
+
+
+            Integer count = jdbcTemplate.queryForObject(sql,parametres,Integer.class);
+
+
+            return  count!=0;
+
+        }
+        catch (Exception ex){
+
+            return false;
+        }
+
+    }
+        @Override
+    public boolean checkEmployeeByName(String fullName){
+
+        MapSqlParameterSource parametres = new MapSqlParameterSource();
+
+        parametres.addValue("fullName",fullName);
+
+        try {
+            String sql = "select fullname from employees where  = " +
+                    fullName;
+
+
+            Integer count = jdbcTemplate.queryForObject(sql,parametres,Integer.class);
+
+
+            return  count!=0;
+
+        }
+        catch (Exception ex){
+            return false;
+        }
+
     }
 
 
