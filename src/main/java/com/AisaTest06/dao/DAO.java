@@ -293,20 +293,23 @@ public class DAO implements DAOi{
 
         MapSqlParameterSource parametres = new MapSqlParameterSource();
         parametres.addValue("name",name);
-
+//"";
         try {
-            String sql = "select name from companies where name = " +
-                    name;
+            String sql = "select count(name) from companies where name = :name";
+
 
 
             Integer count = jdbcTemplate.queryForObject(sql,parametres,Integer.class);
 
 
-            return  count!=0;
+            if (count>0){
+                return  true;}
+            else {return false;}
+
 
         }
-        catch (Exception ex){
-
+        catch (DataAccessException ex){
+            logger.warning("Ошибка при проверке компании по имени "+ ex);
             return false;
         }
 
@@ -319,17 +322,18 @@ public class DAO implements DAOi{
         parametres.addValue("fullName",fullName);
 
         try {
-            String sql = "select fullname from employees where  = " +
-                    fullName;
+            String sql = "SELECT count(fullname) from employees where fullname = :fullname";
 
 
             Integer count = jdbcTemplate.queryForObject(sql,parametres,Integer.class);
 
-
-            return  count!=0;
+            if (count>0){
+            return  true;}
+            else {return false;}
 
         }
-        catch (Exception ex){
+        catch (DataAccessException ex){
+            logger.warning("Ошибка при проверке сотрудника по имени "+ ex);
             return false;
         }
 

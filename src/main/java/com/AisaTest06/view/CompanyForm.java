@@ -22,6 +22,7 @@ public class CompanyForm extends FormLayout {
 //
 //    }
 //
+//
 //    public CompanyForm getEditForm(Company company, boolean b){
 //        removeAllComponents();
 //
@@ -35,6 +36,8 @@ public class CompanyForm extends FormLayout {
 //
 //        return this;
 //    }
+
+
 
 
 }
