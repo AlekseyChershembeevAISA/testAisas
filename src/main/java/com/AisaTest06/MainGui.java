@@ -26,51 +26,57 @@ public class MainGui extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         //таблицы
         Grids grids = new Grids();
-        //список
-        Lists lists = new Lists();
+      
         UpButtons upButton = new UpButtons();
 
         DAO dao = new DAO();
+        //подключаемся к бд
         dao.dataSource();
 
+        //верхнее поле с филдами и кнопками
         VerticalLayout mainLayout = new VerticalLayout();
+        //нижнее поле с табами и гридами
         HorizontalLayout headLayout = new HorizontalLayout();
         headLayout.setMargin(false);
         headLayout.setSpacing(true);
 
-
+        //окошко для добавления/редактирования/удаления
         VerticalLayout mainWindowLayout = new VerticalLayout();
+
+        //табы
         HorizontalLayout tab1 = new HorizontalLayout();
         HorizontalLayout tab2 = new HorizontalLayout();
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.addTab(tab1, "Компании");
         tabSheet.addTab(tab2, "Сотрудники");
+        //по умолчанию выбрана вкладка с компаниями
         tabSheet.setSelectedTab(tab1);
 
+        //кнопки и поле поиска для шапки
         Button addButton = upButton.addButton("Добавить");
         Button deleteButton = upButton.deleteButton("Удалить");
         Button editButton = upButton.editButton("Редактировать");
-
         TextField search = new TextField();
         search.setPlaceholder("поиск");
         search.setSizeFull();
 
-        Grid<Employee> employeeGrid = grids.gridEmployees();
+        //таблицы с компаниями и сотрудниками
         Grid<Company> companyGrid = grids.gridCompanies();
-        employeeGrid.setSizeFull();
+        Grid<Employee> employeeGrid = grids.gridEmployees();
         companyGrid.setSizeFull();
+        employeeGrid.setSizeFull();
 
-
+        //выпадающие списки
         ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
         ComboBox<Employee> selectAllEmployees = new ComboBox<>("Выбрать сотрудника");
-
         selectAllCompanies.setEmptySelectionAllowed(false);
         selectAllEmployees.setEmptySelectionAllowed(false);
 
-        List<Company> companyIds = lists.fillingListCompany();
-        List<Employee> employeeIds = lists.fillingListEmployee();
+        List<Company> companyList = dao.selectAllCompanies();
+        List<Employee> employeeList = dao.selectAllEmployees();
 
+        //что будут содержать поля с ui
         final int[] CompanyIdArr = {0};
         final int[] employeeIdArr = {0};
         final String[] fullNameArr = {""};
@@ -178,7 +184,6 @@ public class MainGui extends UI {
             }
 
         });
-
         //добавляем новое окошко взависимости от выбранной табы
         addButton.addClickListener(clickEvent -> {
 
@@ -241,7 +246,7 @@ public class MainGui extends UI {
                 mainWindowLayout.addComponents(fullName, dateField, email,
                         selectAllCompanies, addEmployee);
 
-                selectAllCompanies.setItems(companyIds);
+                selectAllCompanies.setItems(companyList);
                 selectAllCompanies.setItemCaptionGenerator(Company::getName);
 
                 additionWindow.addCloseListener((Window.CloseListener)
@@ -278,7 +283,7 @@ public class MainGui extends UI {
                 DeleteCompany deleteComWindow = new DeleteCompany();
                 Button deleteCompany = new Button("Удалить компанию");
 
-                selectAllCompanies.setItems(companyIds);
+                selectAllCompanies.setItems(companyList);
                 selectAllCompanies.setItemCaptionGenerator(Company::getName);
 
                 mainWindowLayout.addComponents(selectAllCompanies, deleteCompany);
@@ -306,7 +311,7 @@ public class MainGui extends UI {
 
                 mainWindowLayout.addComponents(selectAllEmployees, deleteEmployee);
 
-                selectAllEmployees.setItems(employeeIds);
+                selectAllEmployees.setItems(employeeList);
                 selectAllEmployees.setItemCaptionGenerator(Employee::getFullname);
 
                 deleteWindow.addCloseListener((Window.CloseListener)
@@ -337,7 +342,7 @@ public class MainGui extends UI {
 
                 events(companyNameArr, NIPArr, AddressArr, PhoneArr, name, nip, address, phone);
 
-                selectAllCompanies.setItems(companyIds);
+                selectAllCompanies.setItems(companyList);
                 selectAllCompanies.setItemCaptionGenerator(Company::getName);
 
                 mainWindowLayout.addComponents(selectAllCompanies, name, nip, address, phone, editCompany);
@@ -402,9 +407,9 @@ public class MainGui extends UI {
                         (HasValue.ValueChangeListener<String>) valueChangeEvent ->
                                 textFieldNameArr[0] = valueChangeEvent.getValue());
 
-                selectAllCompanies.setItems(companyIds);
+                selectAllCompanies.setItems(companyList);
                 selectAllCompanies.setItemCaptionGenerator(Company::getName);
-                selectAllEmployees.setItems(employeeIds);
+                selectAllEmployees.setItems(employeeList);
                 selectAllEmployees.setItemCaptionGenerator(Employee::getFullname);
 
                 editWindow.addCloseListener((Window.CloseListener) closeEvent ->
