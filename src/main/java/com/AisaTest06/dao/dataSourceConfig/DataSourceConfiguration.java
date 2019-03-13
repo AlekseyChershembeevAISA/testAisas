@@ -16,20 +16,21 @@ public class DataSourceConfiguration {
 
     private static Logger logger = Logger.getLogger(DataSourceConfiguration.class.getName());
 
-    private static BasicDataSource dataSource(){
-            BasicDataSource dataSource = new BasicDataSource();
-            dataSource.setDriverClassName("org.postgresql.Driver");
-            dataSource.setUrl("jdbc:postgresql://localhost/crowd7");
-            dataSource.setUsername("postgres");
-            dataSource.setPassword("123");
-            return dataSource;
+    private static BasicDataSource dataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost/crowd7");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("123");
+        return dataSource;
     }
-    public static synchronized BasicDataSource getInstance(){
-        if (dataSource==null){
+
+    public static synchronized BasicDataSource getInstance() {
+        if (dataSource == null) {
             dataSource = dataSource();
             return dataSource;
         }
-            return dataSource;
+        return dataSource;
     }
 }
 

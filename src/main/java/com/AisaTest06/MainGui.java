@@ -3,6 +3,8 @@ package com.AisaTest06;
 
 import com.AisaTest06.Entity.Company;
 import com.AisaTest06.Entity.Employee;
+import com.AisaTest06.dao.CompanyDaoI;
+import com.AisaTest06.dao.EmployeeDaoI;
 import com.AisaTest06.dao.daoInterfaces.CompanyDao;
 import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.view.*;
@@ -28,16 +30,12 @@ public class MainGui extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         //таблицы
         Grids grids = new Grids();
-      
+
         UpButtons upButton = new UpButtons();
 
-        //DAO dao = new DAO();
         //подключаемся к бд
-        //dao.dataSource();
-        CompanyDao companyDao = new com.AisaTest06.dao.CompanyDao();
-        EmployeeDao employeeDao = new com.AisaTest06.dao.EmployeeDao();
-
-
+        CompanyDao companyDao = new CompanyDaoI();
+        EmployeeDao employeeDao = new EmployeeDaoI();
 
 
         //верхнее поле с филдами и кнопками
@@ -111,32 +109,31 @@ public class MainGui extends UI {
         DateField dateField = new DateField("Дата рождения");
         TextField email = new TextField("Email");
         //поиск по слову search
-        search.addValueChangeListener(e ->{
-            if (tabSheet.getSelectedTab().equals(tab1)){
+        search.addValueChangeListener(e -> {
+            if (tabSheet.getSelectedTab().equals(tab1)) {
                 companyGrid.setItems(companyDao.searchAllCompanies(search.getValue()));
                 mainLayout.addComponent(companyGrid);
                 mainLayout.removeComponent(employeeGrid);
-                logger.info("Выбран tab1 с search "+ search.getValue());
-            }
-            else if (tabSheet.getSelectedTab().equals(tab2)){
+                logger.info("Выбран tab1 с search " + search.getValue());
+            } else if (tabSheet.getSelectedTab().equals(tab2)) {
                 employeeGrid.setItems(employeeDao.searchAllEmployees(search.getValue()));
                 mainLayout.addComponent(employeeGrid);
                 mainLayout.removeComponent(companyGrid);
-                logger.info("Выбран tab2 с search "+ search.getValue());
+                logger.info("Выбран tab2 с search " + search.getValue());
             }
-        }) ;
+        });
         //выбираем сотрудника из комбобокса
         selectAllEmployees.addValueChangeListener(event -> {
             Employee employee = event.getValue();
             employeeIdArr[0] = employee.getEmployeeId();
-            logger.info("Выбран сотрудник в combobox "+employee.getFullname());
+            logger.info("Выбран сотрудник в combobox " + employee.getFullname());
 
         });
         //выбираем компании из комбобокса
         selectAllCompanies.addValueChangeListener(event -> {
             Company company = event.getValue();
             CompanyIdArr[0] = company.getCompanyId();
-            logger.info("Выбрана компания в combobox "+company.getName());
+            logger.info("Выбрана компания в combobox " + company.getName());
         });
         //выбираем таб из tasbsheet
         tabSheet.addSelectedTabChangeListener(
@@ -146,9 +143,9 @@ public class MainGui extends UI {
                         mainLayout.addComponent(companyGrid);
                         mainLayout.removeComponent(employeeGrid);
 
-                        logger.info("Выбран tab1" );
+                        logger.info("Выбран tab1");
 
-                    } else if (tabSheet.getSelectedTab().equals(tab2)){
+                    } else if (tabSheet.getSelectedTab().equals(tab2)) {
                         employeeGrid.setItems(employeeDao.selectAllEmployees());
                         mainLayout.addComponent(employeeGrid);
                         mainLayout.removeComponent(companyGrid);
@@ -158,34 +155,31 @@ public class MainGui extends UI {
                     }
                 });
         //проверяем инн
-        nip.addValueChangeListener(event->{
-            if (event.getValue().length()!=12&&event.getValue().matches("\\d+")){
+        nip.addValueChangeListener(event -> {
+            if (event.getValue().length() != 12 && event.getValue().matches("\\d+")) {
                 nip.setComponentError(new UserError("Должно быть 12 цифр"));
-            }
-            else {
+            } else {
                 nip.setComponentError(null);
                 Notification.show(event.getValue());
             }
         });
         //проверяем телефон
-        phone.addValueChangeListener(event->{
-            if (!event.getValue().matches("\\d+")){
+        phone.addValueChangeListener(event -> {
+            if (!event.getValue().matches("\\d+")) {
                 phone.setComponentError(new UserError("Должны быть цифры"));
-            }
-            else {
+            } else {
                 phone.setComponentError(null);
                 Notification.show(event.getValue());
             }
         });
         //проверяем email
-        email.addValueChangeListener(event->{
-             String EMAIL_PATTERN =
+        email.addValueChangeListener(event -> {
+            String EMAIL_PATTERN =
                     "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
                             "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-            if (!event.getValue().matches(EMAIL_PATTERN)){
+            if (!event.getValue().matches(EMAIL_PATTERN)) {
                 email.setComponentError(new UserError("Нужен email"));
-            }
-            else {
+            } else {
                 email.setComponentError(null);
                 Notification.show(event.getValue());
             }
@@ -210,24 +204,21 @@ public class MainGui extends UI {
                     Company company = null;
                     try {
 
-                    company= new Company(companyNameArr[0], Long.parseLong(NIPArr[0])
-                            , AddressArr[0], Long.parseLong(PhoneArr[0]));
+                        company = new Company(companyNameArr[0], Long.parseLong(NIPArr[0])
+                                , AddressArr[0], Long.parseLong(PhoneArr[0]));
 
-                    }
-                    catch (NumberFormatException ex){
-                       logger.warning("Неверные данные компании "+ ex);
+                    } catch (NumberFormatException ex) {
+                        logger.warning("Неверные данные компании " + ex);
                     }
                     if
-                        (companyDao.checkCompanyByName(company.getName())){
-                        logger.warning("Такая компания уже существет "+ company.getName());
-                            company.setName("");
-                    }
-                    else if (companyNameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
+                    (companyDao.checkCompanyByName(company.getName())) {
+                        logger.warning("Такая компания уже существет " + company.getName());
+                        company.setName("");
+                    } else if (companyNameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
                             AddressArr[0].isEmpty() || PhoneArr[0].isEmpty()) {
 
-                        Notification.show("Ошибка " + fullNameArr[0] );
-                    }
-                    else {
+                        Notification.show("Ошибка " + fullNameArr[0]);
+                    } else {
 
                         companyDao.insertCompany(company);
                         Notification.show(companyNameArr[0] + "Ок");
@@ -248,7 +239,7 @@ public class MainGui extends UI {
 
                 Button addEmployee = new Button("Добавить сотрудника");
 
-                events(fullName,dateField,email,fullNameArr,dateArr,emailArr);
+                events(fullName, dateField, email, fullNameArr, dateArr, emailArr);
 
                 mainWindowLayout.addComponents(fullName, dateField, email,
                         selectAllCompanies, addEmployee);
@@ -268,12 +259,11 @@ public class MainGui extends UI {
                     Employee employee = new Employee(fullNameArr[0], dateArr[0]
                             , emailArr[0], CompanyIdArr[0]);
 
-                   if (fullNameArr[0].isEmpty() || dateArr[0].isEmpty() || emailArr[0].isEmpty()) {
-                        Notification.show("Ошибка " + fullNameArr[0] );
+                    if (fullNameArr[0].isEmpty() || dateArr[0].isEmpty() || emailArr[0].isEmpty()) {
+                        Notification.show("Ошибка " + fullNameArr[0]);
 
-                        logger.warning("Необходимо заполнить пустые поля "+employee.toString());
-                    }
-                    else {
+                        logger.warning("Необходимо заполнить пустые поля " + employee.toString());
+                    } else {
                         employeeDao.insertEmployee(employee);
                         Notification.show(fullNameArr[0] + "Ок");
                     }
@@ -366,16 +356,15 @@ public class MainGui extends UI {
                     Company company = null;
                     try {
 
-                    company= new Company(CompanyIdArr[0], companyNameArr[0], Long.parseLong(NIPArr[0])
-                            , AddressArr[0], Long.parseLong(PhoneArr[0]));
-                    }
-                    catch (NumberFormatException ex){
-                        logger.warning("Неверная редакция компании "+ ex);
+                        company = new Company(CompanyIdArr[0], companyNameArr[0], Long.parseLong(NIPArr[0])
+                                , AddressArr[0], Long.parseLong(PhoneArr[0]));
+                    } catch (NumberFormatException ex) {
+                        logger.warning("Неверная редакция компании " + ex);
                     }
 
                     if (companyNameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
                             AddressArr[0].isEmpty() || PhoneArr[0].isEmpty()) {
-                        Notification.show("Ошибка " + CompanyIdArr[0] );
+                        Notification.show("Ошибка " + CompanyIdArr[0]);
 
                     } else {
                         companyDao.editCompany(company);
@@ -427,18 +416,17 @@ public class MainGui extends UI {
                     editWindow.close();
                     mainWindowLayout.removeAllComponents();
                     tabSheet.setSelectedTab(tab1);
-                    Employee employee =null;
+                    Employee employee = null;
                     try {
                         employee = new Employee(
                                 employeeIdArr[0], textFieldNameArr[0], dateArr[0], emailArr[0], CompanyIdArr[0]);
-                    }
-                    catch (NumberFormatException ex){
-                        logger.warning("Неверная редакция сотрудника "+ ex);
+                    } catch (NumberFormatException ex) {
+                        logger.warning("Неверная редакция сотрудника " + ex);
                     }
 
 
                     if (textFieldNameArr[0].isEmpty() || dateArr[0].isEmpty() || emailArr[0].isEmpty()) {
-                        Notification.show("Ошибка " + employeeIdArr[0] );
+                        Notification.show("Ошибка " + employeeIdArr[0]);
 
                     } else {
                         employeeDao.editEmployee(employee);
@@ -451,6 +439,7 @@ public class MainGui extends UI {
             }
         });
     }
+
     //метод для заполнения полей компании
     private void events(String[] companyNameArr, String[] NIPArr, String[] addressArr, String[] phoneArr,
                         TextField name, TextField nip, TextField address, TextField phone) {
@@ -476,9 +465,10 @@ public class MainGui extends UI {
 
 
     }
+
     //метод для заполнения полей сотрудника
-    private void events(TextField fullName,DateField dateField,TextField email,
-                        String [] fullNameArr,String [] dateArr,String [] emailArr){
+    private void events(TextField fullName, DateField dateField, TextField email,
+                        String[] fullNameArr, String[] dateArr, String[] emailArr) {
         fullName.setRequiredIndicatorVisible(true);
         dateField.setRequiredIndicatorVisible(true);
         email.setRequiredIndicatorVisible(true);
@@ -496,6 +486,7 @@ public class MainGui extends UI {
                 (HasValue.ValueChangeListener<String>) valueChangeEvent ->
                         emailArr[0] = valueChangeEvent.getValue());
     }
+
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MainGui.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {

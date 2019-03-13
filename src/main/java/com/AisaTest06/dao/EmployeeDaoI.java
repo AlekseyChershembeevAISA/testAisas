@@ -1,6 +1,5 @@
 package com.AisaTest06.dao;
 
-import com.AisaTest06.Entity.Company;
 import com.AisaTest06.Entity.Employee;
 import com.AisaTest06.dao.dataSourceConfig.DataSourceConfiguration;
 import com.AisaTest06.dao.rowMappers.EmployeeRowMapper;
@@ -11,16 +10,16 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class EmployeeDao implements com.AisaTest06.dao.daoInterfaces.EmployeeDao {
+public class EmployeeDaoI implements com.AisaTest06.dao.daoInterfaces.EmployeeDao {
 
-    private static Logger logger = Logger.getLogger(CompanyDao.class.getName());
+    private static Logger logger = Logger.getLogger(CompanyDaoI.class.getName());
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public EmployeeDao() {
+    public EmployeeDaoI() {
 
         this.jdbcTemplate = new NamedParameterJdbcTemplate(DataSourceConfiguration.getInstance());
-        logger.info("Успешно подключение к EmployeeDao");
+        logger.info("Успешно подключение к EmployeeDaoI");
     }
 
     @Override
@@ -32,11 +31,11 @@ public class EmployeeDao implements com.AisaTest06.dao.daoInterfaces.EmployeeDao
 
         try {
             edit(employee, sql, parameters);
-            logger.info("Успешно добавлен новый сотрудник "+employee.getFullname());
+            logger.info("Успешно добавлен новый сотрудник " + employee.getFullname());
             return employee;
 
         } catch (DataAccessException d) {
-            logger.warning("Ошибка при добавлении нового сотрудника " +d);
+            logger.warning("Ошибка при добавлении нового сотрудника " + d);
             return null;
         }
 
@@ -63,15 +62,14 @@ public class EmployeeDao implements com.AisaTest06.dao.daoInterfaces.EmployeeDao
         MapSqlParameterSource parameters = new MapSqlParameterSource();
 
         try {
-            parameters.addValue("employeeid",employee.getEmployeeId());
+            parameters.addValue("employeeid", employee.getEmployeeId());
             edit(employee, sql, parameters);
-            logger.info("Успешно изменен сотрудник "+ employee.getEmployeeId()+" "+employee.getFullname());
+            logger.info("Успешно изменен сотрудник " + employee.getEmployeeId() + " " + employee.getFullname());
 
             return employee;
         } catch (DataAccessException d) {
-            logger.warning("Ошибка при изменении сотрудника "+ d);
+            logger.warning("Ошибка при изменении сотрудника " + d);
             return null;
-
         }
 
     }
@@ -87,11 +85,11 @@ public class EmployeeDao implements com.AisaTest06.dao.daoInterfaces.EmployeeDao
 
             result = jdbcTemplate.update(sql, parameters);
 
-            logger.info("Успешно удален сотрудник "+ employee.getEmployeeId()+" "+ employee.getFullname());
+            logger.info("Успешно удален сотрудник " + employee.getEmployeeId() + " " + employee.getFullname());
 
             return result;
-        } catch (DataAccessException d){
-            logger.warning("Ошибка при удалении сотрудника "+ d);
+        } catch (DataAccessException d) {
+            logger.warning("Ошибка при удалении сотрудника " + d);
             return 0;
         }
 
@@ -109,7 +107,7 @@ public class EmployeeDao implements com.AisaTest06.dao.daoInterfaces.EmployeeDao
             return listAllEmployees;
 
         } catch (DataAccessException d) {
-            logger.warning("Ошибка при добавлении сотрудников "+ d);
+            logger.warning("Ошибка при добавлении сотрудников " + d);
             return null;
         }
 
@@ -117,19 +115,18 @@ public class EmployeeDao implements com.AisaTest06.dao.daoInterfaces.EmployeeDao
     }
 
     @Override
-    public List<Employee>searchAllEmployees(String search){
+    public List<Employee> searchAllEmployees(String search) {
         List<Employee> listEmployee;
         String sql;
         try {
-            if (!search.equals(""))
-            {
+            if (!search.equals("")) {
                 sql = "select*from employees where " +
                         "fullname like " +
-                        "" +"'%" + search + "%' " +
+                        "" + "'%" + search + "%' " +
                         "or birthdate like " +
-                        "" +"'%" + search + "%' " +
+                        "" + "'%" + search + "%' " +
                         "or email like " +
-                        "" +"'%" + search + "%' ";
+                        "" + "'%" + search + "%' ";
 
                 Employee employee = new Employee();
                 employee.setEmployeeId(employee.getEmployeeId());
@@ -138,22 +135,18 @@ public class EmployeeDao implements com.AisaTest06.dao.daoInterfaces.EmployeeDao
                 employee.setBirthDate(employee.getBirthDate());
                 employee.setCompanyId(employee.getCompanyId());
 
-                listEmployee= jdbcTemplate.query(sql,new EmployeeRowMapper());
-                logger.info("Успешно найдены искомые сотрудники по строке "+ search);
+                listEmployee = jdbcTemplate.query(sql, new EmployeeRowMapper());
+                logger.info("Успешно найдены искомые сотрудники по строке " + search);
+                return listEmployee;
+            } else {
+                listEmployee = selectAllEmployees();
                 return listEmployee;
             }
-            else {
-                listEmployee =selectAllEmployees();
-                return listEmployee;
-            }
-        }
-        catch (DataAccessException d){
-            logger.warning("Ошибка при поиске сотрудника по строке "+d);
+        } catch (DataAccessException d) {
+            logger.warning("Ошибка при поиске сотрудника по строке " + d);
             return null;
         }
     }
-
-
 
 
 }
