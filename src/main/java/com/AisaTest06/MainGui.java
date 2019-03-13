@@ -323,7 +323,6 @@ public class MainGui extends UI {
                     Employee employee = new Employee(employeeIdArr[0]);
                     employeeDao.deleteEmployee(employee);
 
-
                 });
                 deleteWindow.setContent(mainWindowLayout);
                 addWindow(deleteWindow);

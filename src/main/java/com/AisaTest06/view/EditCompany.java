@@ -9,4 +9,5 @@ public class EditCompany extends Window {
         setStyleName("Редактировать компанию");
 
     }
+
 }
