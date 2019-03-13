@@ -1,8 +1,10 @@
 package com.AisaTest06;
 
-import com.AisaTest06.dao.DAO;
-import com.AisaTest06.model.Company;
-import com.AisaTest06.model.Employee;
+
+import com.AisaTest06.Entity.Company;
+import com.AisaTest06.Entity.Employee;
+import com.AisaTest06.dao.daoInterfaces.CompanyDao;
+import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.view.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -29,9 +31,14 @@ public class MainGui extends UI {
       
         UpButtons upButton = new UpButtons();
 
-        DAO dao = new DAO();
+        //DAO dao = new DAO();
         //подключаемся к бд
-        dao.dataSource();
+        //dao.dataSource();
+        CompanyDao companyDao = new com.AisaTest06.dao.CompanyDao();
+        EmployeeDao employeeDao = new com.AisaTest06.dao.EmployeeDao();
+
+
+
 
         //верхнее поле с филдами и кнопками
         VerticalLayout mainLayout = new VerticalLayout();
@@ -73,8 +80,8 @@ public class MainGui extends UI {
         selectAllCompanies.setEmptySelectionAllowed(false);
         selectAllEmployees.setEmptySelectionAllowed(false);
 
-        List<Company> companyList = dao.selectAllCompanies();
-        List<Employee> employeeList = dao.selectAllEmployees();
+        List<Company> companyList = companyDao.selectAllCompanies();
+        List<Employee> employeeList = employeeDao.selectAllEmployees();
 
         //что будут содержать поля с ui
         final int[] CompanyIdArr = {0};
@@ -91,7 +98,7 @@ public class MainGui extends UI {
         headLayout.addComponents(addButton, editButton, deleteButton, search);
         mainLayout.addComponent(headLayout);
         mainLayout.addComponent(tabSheet);
-        companyGrid.setItems(dao.selectAllCompanies());
+        companyGrid.setItems(companyDao.selectAllCompanies());
         mainLayout.addComponent(companyGrid);
         setContent(mainLayout);
         //поля компании
@@ -106,13 +113,13 @@ public class MainGui extends UI {
         //поиск по слову search
         search.addValueChangeListener(e ->{
             if (tabSheet.getSelectedTab().equals(tab1)){
-                companyGrid.setItems(dao.searchAllCompanies(search.getValue()));
+                companyGrid.setItems(companyDao.searchAllCompanies(search.getValue()));
                 mainLayout.addComponent(companyGrid);
                 mainLayout.removeComponent(employeeGrid);
                 logger.info("Выбран tab1 с search "+ search.getValue());
             }
             else if (tabSheet.getSelectedTab().equals(tab2)){
-                employeeGrid.setItems(dao.searchAllEmployees(search.getValue()));
+                employeeGrid.setItems(employeeDao.searchAllEmployees(search.getValue()));
                 mainLayout.addComponent(employeeGrid);
                 mainLayout.removeComponent(companyGrid);
                 logger.info("Выбран tab2 с search "+ search.getValue());
@@ -135,14 +142,14 @@ public class MainGui extends UI {
         tabSheet.addSelectedTabChangeListener(
                 (TabSheet.SelectedTabChangeListener) e -> {
                     if (tabSheet.getSelectedTab().equals(tab1)) {
-                        companyGrid.setItems(dao.selectAllCompanies());
+                        companyGrid.setItems(companyDao.selectAllCompanies());
                         mainLayout.addComponent(companyGrid);
                         mainLayout.removeComponent(employeeGrid);
 
                         logger.info("Выбран tab1" );
 
                     } else if (tabSheet.getSelectedTab().equals(tab2)){
-                        employeeGrid.setItems(dao.selectAllEmployees());
+                        employeeGrid.setItems(employeeDao.selectAllEmployees());
                         mainLayout.addComponent(employeeGrid);
                         mainLayout.removeComponent(companyGrid);
 
@@ -211,7 +218,7 @@ public class MainGui extends UI {
                        logger.warning("Неверные данные компании "+ ex);
                     }
                     if
-                        (dao.checkCompanyByName(company.getName())){
+                        (companyDao.checkCompanyByName(company.getName())){
                         logger.warning("Такая компания уже существет "+ company.getName());
                             company.setName("");
                     }
@@ -222,7 +229,7 @@ public class MainGui extends UI {
                     }
                     else {
 
-                        dao.insertCompany(company);
+                        companyDao.insertCompany(company);
                         Notification.show(companyNameArr[0] + "Ок");
                     }
                 });
@@ -267,7 +274,7 @@ public class MainGui extends UI {
                         logger.warning("Необходимо заполнить пустые поля "+employee.toString());
                     }
                     else {
-                        dao.insertEmployee(employee);
+                        employeeDao.insertEmployee(employee);
                         Notification.show(fullNameArr[0] + "Ок");
                     }
                 });
@@ -297,7 +304,7 @@ public class MainGui extends UI {
                     mainWindowLayout.removeAllComponents();
                     tabSheet.setSelectedTab(tab2);
                     Company company = new Company(CompanyIdArr[0]);
-                    dao.deleteCompany(company);
+                    companyDao.deleteCompany(company);
                     Notification.show(CompanyIdArr[0] + "Ок");
 
                 });
@@ -324,7 +331,7 @@ public class MainGui extends UI {
                     mainWindowLayout.removeAllComponents();
                     tabSheet.setSelectedTab(tab1);
                     Employee employee = new Employee(employeeIdArr[0]);
-                    dao.deleteEmployee(employee);
+                    employeeDao.deleteEmployee(employee);
 
 
                 });
@@ -371,7 +378,7 @@ public class MainGui extends UI {
                         Notification.show("Ошибка " + CompanyIdArr[0] );
 
                     } else {
-                        dao.editCompany(company);
+                        companyDao.editCompany(company);
                         Notification.show(CompanyIdArr[0] + "Ок");
                     }
                 });
@@ -434,7 +441,7 @@ public class MainGui extends UI {
                         Notification.show("Ошибка " + employeeIdArr[0] );
 
                     } else {
-                        dao.editEmployee(employee);
+                        employeeDao.editEmployee(employee);
                         Notification.show(employeeIdArr[0] + " Ок");
                     }
                 });

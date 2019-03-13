@@ -1,4 +1,4 @@
-package com.AisaTest06.model;
+package com.AisaTest06.Entity;
 
 import java.util.Objects;
 

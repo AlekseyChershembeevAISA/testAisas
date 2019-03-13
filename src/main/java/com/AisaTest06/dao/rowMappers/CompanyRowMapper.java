@@ -1,6 +1,6 @@
-package com.AisaTest06.dao;
+package com.AisaTest06.dao.rowMappers;
 
-import com.AisaTest06.model.Company;
+import com.AisaTest06.Entity.Company;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

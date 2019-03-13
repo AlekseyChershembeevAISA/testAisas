@@ -1,7 +1,7 @@
 package com.AisaTest06.view;
 
-import com.AisaTest06.model.Company;
-import com.AisaTest06.model.Employee;
+import com.AisaTest06.Entity.Company;
+import com.AisaTest06.Entity.Employee;
 import com.vaadin.ui.Grid;
 
 public class Grids extends Grid {

@@ -1,14 +1,6 @@
 package com.AisaTest06.view;
 
-import com.AisaTest06.dao.DAO;
-import com.AisaTest06.model.Company;
-import com.vaadin.data.Binder;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.TextField;
-
-import java.util.List;
 
 public class CompanyForm extends FormLayout {
 
