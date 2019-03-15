@@ -1,7 +1,7 @@
 package com.AisaTest06.dao.daoInterfaces;
 
 
-import com.AisaTest06.Entity.Employee;
+import com.AisaTest06.entity.Employee;
 
 import java.util.List;
 
@@ -11,7 +11,8 @@ public interface EmployeeDao {
 
     Employee editEmployee(Employee employee);
 
-    int deleteEmployee(Employee employee);
+    //будем удалять по id
+    int deleteEmployee(int employeeid);
 
     List<Employee> selectAllEmployees();
 

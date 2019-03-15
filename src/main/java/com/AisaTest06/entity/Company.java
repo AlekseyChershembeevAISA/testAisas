@@ -1,4 +1,4 @@
-package com.AisaTest06.Entity;
+package com.AisaTest06.entity;
 
 import java.util.Objects;
 
@@ -15,14 +15,6 @@ public class Company {
 
 
 
-    public Company(int companyId) {
-        this.companyId = companyId;
-    }
-
-    public Company(int companyId, String name) {
-        this.companyId = companyId;
-        this.name = name;
-    }
 
     public Company(int companyId, String name, long nip, String address, long phone) {
         this.companyId = companyId;
@@ -60,12 +52,7 @@ public class Company {
                 '}';
     }
 
-    public Company(String name, long nip, String address, long phone) {
-        this.name = name;
-        this.nip = nip;
-        this.address = address;
-        this.phone = phone;
-    }
+
 
     public int getCompanyId() {
         return companyId;
