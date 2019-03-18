@@ -10,12 +10,13 @@ public interface CompanyDao {
     Company insertCompany(Company company);
 
     Company editCompany(Company company);
+
     //будем удалять по id
     int deleteCompany(int companyid);
 
-    List<Company> selectAllCompanies();
+    List selectAllCompanies();
 
-    List<Company>searchAllCompanies(String search);
+    List<Company> searchAllCompanies(String search);
 
     boolean checkCompanyByName(String name);
 }

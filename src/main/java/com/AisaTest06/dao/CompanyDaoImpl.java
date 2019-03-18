@@ -48,7 +48,6 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
         }
     }
 
-
     private static final String DAO_EDIT_COMPANY =
             "UPDATE companies " +
                     "SET name=:name," +
@@ -109,18 +108,18 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
     }
 
     private static final String DAO_SELECT_ALL_COMPANIES =
-            "SELECT companyid,name,nip,address,phone " +
-                    "FROM companies";
+            "SELECT companyid,name,nip,address,phone FROM companies";
 
     @Override
-    public List<Company> selectAllCompanies() {
-        List<Company> listCompanies;
+    public List selectAllCompanies() {
+        List listCompanies;
 
 
         try {
             listCompanies = jdbcTemplate.query(DAO_SELECT_ALL_COMPANIES, new CompanyRowMapper());
 
             logger.info("Успешно добавлены все компании ");
+
             return listCompanies;
 
 
@@ -132,9 +131,8 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
 
     }
 
-    ;
 
-    private static String DAO_SEARCH_ALL_COMPANIES(String search){
+    private static String DAO_SEARCH_ALL_COMPANIES(String search) {
         String filterLike = "" + "'%" + search + "%' ";
 
         return "select*from companies where " +
@@ -191,13 +189,8 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
 
             Integer count = jdbcTemplate.queryForObject(DAO_CHECK_COMPANY_BY_NAME, parametres, Integer.class);
 
-            if (count > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        catch (DataAccessException ex) {
+            return count > 0;
+        } catch (DataAccessException ex) {
             logger.warning("Ошибка при проверке компании по имени " + ex);
             return false;
         }

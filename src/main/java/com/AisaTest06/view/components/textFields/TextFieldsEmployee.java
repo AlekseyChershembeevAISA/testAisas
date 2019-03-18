@@ -8,45 +8,42 @@ import com.vaadin.ui.TextField;
 public class TextFieldsEmployee extends TextField {
 
 
-
     private TextField fullName;
     private DateField dateField;
     private TextField email;
 
     public TextField getFullName() {
         fullName = new TextField("ФИО");
-
-//        fullName.addValueChangeListener(valueChangeEvent -> {
-//
-//                  });
+        fullName.setSizeFull();
         return fullName;
     }
 
     public DateField getDateField() {
 
         dateField = new DateField("Дата рождения");
+        dateField.setSizeFull();
 
-//            dateField.addValueChangeListener(valueChangeEvent -> {
-//
-//            });
+
         return dateField;
     }
 
     public TextField getEmail() {
 
         email = new TextField("Email");
+        email.setSizeFull();
         email.addValueChangeListener(event -> {
             String EMAIL_PATTERN =
-                    "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                    "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@" +
                             "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 
-           if (!event.getValue().matches(EMAIL_PATTERN)) {
+            if (!event.getValue().matches(EMAIL_PATTERN)) {
                 email.setComponentError(new UserError("Нужен email"));
             } else {
                 email.setComponentError(null);
 
             }
+
 
 
         });

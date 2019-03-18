@@ -24,8 +24,9 @@ public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.Employe
 
     private static final String DAO_INSERT_EMPLOYEE =
             "INSERT INTO EMPLOYEES " +
-            "(fullName, birthDate, email, companyid, namecompany) " +
-            "VALUES(:fullname,:birthdate,:email,:companyid,:namecompany)";
+                    "(fullName, birthDate, email, companyid, namecompany) " +
+                    "VALUES(:fullname,:birthdate,:email,:companyid,:namecompany)";
+
     @Override
     public Employee insertEmployee(Employee employee) {
 
@@ -37,7 +38,7 @@ public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.Employe
             parameters.addValue("birthdate", employee.getBirthDate());
             parameters.addValue("email", employee.getEmail());
             parameters.addValue("companyid", employee.getCompanyId());
-            parameters.addValue("namecompany",employee.getNameCompany());
+            parameters.addValue("namecompany", employee.getNameCompany());
 
             jdbcTemplate.update(DAO_INSERT_EMPLOYEE, parameters);
 
@@ -49,16 +50,13 @@ public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.Employe
             logger.warning("Ошибка при добавлении нового сотрудника " + d);
             return null;
         }
-
     }
-
 
     private static String DAO_EDIT_EMPLOYEE =
             "UPDATE employees " +
                     "SET fullname=:fullname," +
                     "birthdate=:birthdate," +
                     "email=:email," +
-                    "companyid=:companyid, " +
                     "namecompany=:namecompany " +
                     "WHERE employeeid=:employeeid";
 
@@ -74,7 +72,9 @@ public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.Employe
             parameters.addValue("birthdate", employee.getBirthDate());
             parameters.addValue("email", employee.getEmail());
             parameters.addValue("companyid", employee.getCompanyId());
-            parameters.addValue("namecompany",employee.getNameCompany());
+            parameters.addValue("namecompany", employee.getNameCompany());
+
+
 
             jdbcTemplate.update(DAO_EDIT_EMPLOYEE, parameters);
 
@@ -103,7 +103,7 @@ public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.Employe
 
             result = jdbcTemplate.update(DAO_DELETE_EMPLOYEE, parameters);
 
-            logger.info("Успешно удален сотрудник " + employeeid + " " );
+            logger.info("Успешно удален сотрудник " + employeeid + " ");
 
             return result;
         } catch (DataAccessException d) {
@@ -136,7 +136,7 @@ public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.Employe
 
     }
 
-    private static String DAO_SEARCH_ALL_EMPLOYEES(String search){
+    private static String DAO_SEARCH_ALL_EMPLOYEES(String search) {
         String filterLike = "" + "'%" + search + "%' ";
 
         return "select*from employees where " +
@@ -153,7 +153,7 @@ public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.Employe
 
     @Override
     public List<Employee> searchAllEmployees(String search) {
-        List<Employee> listEmployee;
+        List listEmployee;
 
         try {
             if (!search.equals("")) {

@@ -10,7 +10,7 @@ public class Employee {
     private int companyId;
     private String nameCompany;
 
-    public Employee(){
+    public Employee() {
 
     }
 
@@ -110,9 +110,6 @@ public class Employee {
         this.email = email;
         this.nameCompany = nameCompany;
     }
-
-
-
 
 
 }

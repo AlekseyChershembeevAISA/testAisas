@@ -2,14 +2,16 @@ package com.AisaTest06.view.windows;
 
 
 import com.AisaTest06.dao.CompanyDaoImpl;
+import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.CompanyDao;
+import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
-import com.AisaTest06.dao.EmployeeDaoImpl;
-import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.view.components.textFields.TextFieldsEmployee;
-import com.vaadin.server.Page;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -21,6 +23,12 @@ public class AddEmployeeWindow extends Window {
 
     public AddEmployeeWindow() {
 
+        setWidth(420f, Unit.PIXELS);
+
+        FormLayout content = new FormLayout();
+
+        content.setMargin(true);
+
         setModal(true);
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
@@ -29,9 +37,7 @@ public class AddEmployeeWindow extends Window {
         setClosable(true);
         setDraggable(false);
 
-
         setStyleName("Добавить нового сотрудника");
-
 
         List<Company> companyList = companyDao.selectAllCompanies();
 
@@ -42,10 +48,16 @@ public class AddEmployeeWindow extends Window {
         selectAllCompanies.setItemCaptionGenerator(Company::getName);
         selectAllCompanies.setEmptySelectionAllowed(false);
 
+        Button addEmployee = new com.vaadin.ui.Button("Добавить");
+        addEmployee.setSizeFull();
+        addEmployee.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        addEmployee.setIcon(VaadinIcons.INSERT);
 
-        Button addEmployee = new com.vaadin.ui.Button("Добавить сотрудника");
 
-        //провери
+        Button cancel = new Button("Отменить",clickEvent -> close());
+
+        cancel.setSizeFull();
+
         TextFieldsEmployee textFieldsEmployee = new TextFieldsEmployee();
 
         TextField fullName = textFieldsEmployee.getFullName();
@@ -55,32 +67,18 @@ public class AddEmployeeWindow extends Window {
         final String[] fullNameArr = {""};
         final String[] dateFieldArr = {""};
         final String[] emailArr = {""};
-        //final int [] employeeIdArr = {0};
-        final String [] companyNameArr = {""};
-        final int [] companyId = {0};
-
-
-//        this.employeeId = employeeId;
-//        this.fullName = fullName;
-//        this.birthDate = birthDate;
-//        this.email = email;
-//        this.companyId = companyId;
-//        this.nameCompany = nameCompany;
-
-
+        final String[] companyNameArr = {""};
+        final int[] companyId = {0};
 
 
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
             companyId[0] = valueChangeEvent.getValue().getCompanyId();
             companyNameArr[0] = valueChangeEvent.getValue().getName();
-
         });
 
-        VerticalLayout verticalLayout = new VerticalLayout();
+        content.addComponents(selectAllCompanies,fullName,dateField,email,addEmployee,cancel);
 
-        verticalLayout.addComponents(selectAllCompanies,fullName, dateField, email, addEmployee);
-
-        setContent(verticalLayout);
+        setContent(content);
 
         fullName.setRequiredIndicatorVisible(true);
         dateField.setRequiredIndicatorVisible(true);
@@ -100,35 +98,31 @@ public class AddEmployeeWindow extends Window {
 
         addEmployee.addClickListener((Button.ClickListener) clickEvent6 -> {
 
-            if (!(fullNameArr[0].isEmpty()||dateFieldArr[0].isEmpty()
-                    ||emailArr[0].isEmpty())||companyNameArr[0].isEmpty()){
+            if (!((fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty()
+                    || emailArr[0].isEmpty()) || companyNameArr[0].isEmpty())) {
 
 
-            Employee employee;
-            try {
+                Employee employee;
+                try {
 
-                employee = new Employee(fullNameArr[0], dateFieldArr[0], emailArr[0],companyId[0],companyNameArr[0]);
+                    employee = new Employee(fullNameArr[0], dateFieldArr[0], emailArr[0], companyId[0], companyNameArr[0]);
 
 
-            if (fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty() ||
-                    emailArr[0].isEmpty()) {
-
+                    if (!(fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty() ||
+                            emailArr[0].isEmpty())) {
+                        employeeDao.insertEmployee(employee);
+                    }
+                } catch (NumberFormatException ex) {
+                    logger.warning("Неверные данные компании " + ex);
+                } catch (NullPointerException ex) {
+                    logger.warning("NPE " + ex);
+                }
             } else {
-                employeeDao.insertEmployee(employee);
-                 Page.getCurrent().reload();
-            }
-            } catch (NumberFormatException ex) {
-                logger.warning("Неверные данные компании " + ex);
-            }
-            catch (NullPointerException ex){
-                logger.warning("NPE "+ ex);
-            }
-            }
-            else {
                 logger.warning("Необходимо заполнить все данные сотрудника "
-                        + fullNameArr[0]+" "+ dateFieldArr[0]+ " "+ emailArr[0]+" "+companyId[0]);
+                        + fullNameArr[0] + " " + dateFieldArr[0] + " " + emailArr[0] + " " + companyId[0]);
             }
         });
+
     }
 }
 

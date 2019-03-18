@@ -3,13 +3,16 @@ package com.AisaTest06.view.windows;
 import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
-import com.vaadin.server.Page;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.CheckBoxGroup;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class DeleteEmployeeWindow extends Window {
@@ -22,46 +25,55 @@ public class DeleteEmployeeWindow extends Window {
         center();
         setClosable(true);
         setDraggable(false);
+        setModal(true);
+        setWidth(270f,Unit.PIXELS);
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
-        List<Employee> employeeList = employeeDao.selectAllEmployees();
 
-        ComboBox<Employee> selectAllEmployees = new ComboBox<>("Выбрать сотрудника");
+        Button deleteEmployee = new Button("Удалить");
+        deleteEmployee.setSizeFull();
+        deleteEmployee.setStyleName(ValoTheme.BUTTON_DANGER);
+        deleteEmployee.setIcon(VaadinIcons.MINUS);
+
+        Button cancel = new Button("Отменить", clickEvent -> close());
+
+        cancel.setSizeFull();
+
+        CheckBoxGroup<Employee> selectAllEmployees = new CheckBoxGroup<>("Выбрать сотрудника");
+
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.addComponents(selectAllEmployees, deleteEmployee, cancel);
+        setContent(verticalLayout);
+
+        List<Employee> employeeList = employeeDao.selectAllEmployees();
 
         selectAllEmployees.setItems(employeeList);
         selectAllEmployees.setItemCaptionGenerator(Employee::getFullName);
-        selectAllEmployees.setEmptySelectionAllowed(false);
 
-        selectAllEmployees.addValueChangeListener(event -> {
-            Employee employee = event.getValue();
-
-            logger.info("Выбрана компания в combobox " + employee.getFullName());
-        });
-
-        Button deleteCompany = new Button("Удалить сотрудника");
-
-
-        VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.addComponents(selectAllEmployees, deleteCompany);
-
-        setContent(verticalLayout);
-
-        int[] employeeId = {0};
         selectAllEmployees.addValueChangeListener(valueChangeEvent -> {
-            employeeId[0] = valueChangeEvent.getValue().getEmployeeId();
+
+            Set<Employee> employeeSet = valueChangeEvent.getValue();
+
+
+            logger.info("Выраны сотрудники " + employeeSet);
+
+            ArrayList<Employee> employeeArrayList = new ArrayList<>(employeeSet);
+
+            deleteEmployee.addClickListener(clickEvent -> {
+
+                for (int i = 0; i < employeeSet.size(); i++) {
+                    if (!employeeArrayList.isEmpty()) {
+                        employeeDao.deleteEmployee(employeeArrayList.get(i).getEmployeeId());
+                        //  Page.getCurrent().reload();
+                        logger.info("сотрудник  успешно удален " + employeeArrayList.get(i));
+                    } else {
+                        logger.warning("Невозможно удалить сотрудника");
+                    }
+                }
+
+            });
+
         });
 
-        deleteCompany.addClickListener(clickEvent -> {
-            if (employeeId[0] != 0) {
-                employeeDao.deleteEmployee(employeeId[0]);
-                Page.getCurrent().reload();
-                logger.info("Сотрудник успешно удален " + employeeId[0]);
-            } else {
-                logger.warning("Невозможно удалить сотрудника");
-            }
-
-        });
     }
-
-
 }

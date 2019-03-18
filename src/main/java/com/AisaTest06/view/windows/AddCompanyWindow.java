@@ -5,37 +5,47 @@ import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.textFields.TextFieldsCompany;
-import com.vaadin.server.Page;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.logging.Logger;
 
 public class AddCompanyWindow extends Window {
 
-
-
     private static Logger logger = Logger.getLogger(AddCompanyWindow.class.getName());
 
-
     public AddCompanyWindow() {
+
+        setWidth(420f, Unit.PIXELS);
+        setHeight(300f, Unit.PIXELS);
+        FormLayout content = new FormLayout();
+
+        content.setMargin(true);
+
         center();
         setClosable(true);
         setDraggable(false);
+        setModal(true);
 
         CompanyDao companyDao = new CompanyDaoImpl();
 
         setStyleName("Добавить новую компанию");
 
-        TextFieldsCompany textFieldsCompany = new TextFieldsCompany();
-        TextField name = textFieldsCompany.getFullName();
-        TextField nip = textFieldsCompany.getNip();
-        TextField address = textFieldsCompany.getAddress();
-        TextField phone = textFieldsCompany.getPhone();
 
-        Button addCompany = new Button("Добавить компанию" );
+        Button addCompany = new Button("Добавить");
+        addCompany.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        addCompany.setIcon(VaadinIcons.INSERT);
+        addCompany.setSizeFull();
+
+        Button cancel = new Button("Отменить");
+        cancel.addClickListener(clickEvent -> close());
+
+        cancel.setSizeFull();
+
 
         final int[] companyid = {0};
         final String[] companyNameArr = {""};
@@ -43,14 +53,14 @@ public class AddCompanyWindow extends Window {
         final String[] AddressArr = {""};
         final String[] PhoneArr = {""};
 
-        VerticalLayout verticalLayout = new VerticalLayout();
+        TextFieldsCompany textFieldsCompany = new TextFieldsCompany();
+        TextField name = textFieldsCompany.getFullName();
+        TextField nip = textFieldsCompany.getNip();
+        TextField address = textFieldsCompany.getAddress();
+        TextField phone = textFieldsCompany.getPhone();
+        content.addComponents(name, nip, address, phone, addCompany, cancel);
 
-
-        verticalLayout.addComponents(name, nip, address, phone, addCompany);
-
-        setContent(verticalLayout);
-
-        setModal(true);
+        setContent(content);
 
         name.setRequiredIndicatorVisible(true);
         nip.setRequiredIndicatorVisible(true);
@@ -74,7 +84,8 @@ public class AddCompanyWindow extends Window {
         addCompany.addClickListener((Button.ClickListener) clickEvent6 -> {
             Company company;
 
-            if (!(companyNameArr[0].isEmpty() || NIPArr[0].isEmpty() || AddressArr[0].isEmpty() || PhoneArr[0].isEmpty())) {
+            if (!(companyNameArr[0].isEmpty() || NIPArr[0].isEmpty()
+                    || AddressArr[0].isEmpty() || PhoneArr[0].isEmpty())) {
 
 
                 try {
@@ -82,37 +93,27 @@ public class AddCompanyWindow extends Window {
                     company = new Company(companyid[0], companyNameArr[0], Long.parseLong(NIPArr[0])
                             , AddressArr[0], Long.parseLong(PhoneArr[0]));
 
-
                     if
                     (companyDao.checkCompanyByName(company.getName())) {
                         logger.warning("Такая компания уже существет " + company.getName());
                         company.setName("");
 
-                    }
-                    else {
+                    } else {
+
                         companyDao.insertCompany(company);
-                         Page.getCurrent().reload();
-
-
-
 
                     }
 
                 } catch (NumberFormatException ex) {
                     logger.warning("Неверные данные компании " + ex);
                 } catch (NullPointerException ex) {
-                    logger.warning("NPE " +ex);
+                    logger.warning("NPE " + ex);
                 }
 
-            }
-            else {
+            } else {
                 logger.warning("Необходимо заполнить все данные компании " +
                         companyNameArr[0] + " " + NIPArr[0] + " " + AddressArr[0] + " " + PhoneArr[0]);
             }
-
-
-
-
 
         });
 

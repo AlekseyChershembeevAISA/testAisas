@@ -9,11 +9,9 @@ public class Company {
     private String address;
     private long phone;
 
-    public Company(){
+    public Company() {
 
     }
-
-
 
 
     public Company(int companyId, String name, long nip, String address, long phone) {
@@ -51,7 +49,6 @@ public class Company {
                 ", phone=" + phone +
                 '}';
     }
-
 
 
     public int getCompanyId() {

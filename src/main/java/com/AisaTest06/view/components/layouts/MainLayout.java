@@ -20,7 +20,7 @@ public class MainLayout extends VerticalLayout {
 
     private static Logger logger = Logger.getLogger(MainLayout.class.getName());
 
-    public static final TabSheet tabSheet = new TabSheet();
+    static final TabSheet tabSheet = new TabSheet();
 
     //табы
     static HorizontalLayout tab1 = new HorizontalLayout();
@@ -43,13 +43,17 @@ public class MainLayout extends VerticalLayout {
         //таблицы с компаниями и сотрудниками
         Grid<Company> companyGrid = grids.gridCompanies();
         Grid<Employee> employeeGrid = grids.gridEmployees();
+
         companyGrid.setSizeFull();
         employeeGrid.setSizeFull();
+
+        grids.clearSortOrder();
 
 
         addComponent(headLayout);
         addComponent(tabSheet);
         addComponent(companyGrid);
+
 
         tabSheet.addSelectedTabChangeListener(
                 (TabSheet.SelectedTabChangeListener) e -> {
@@ -57,6 +61,8 @@ public class MainLayout extends VerticalLayout {
                         companyGrid.setItems(companyDao.selectAllCompanies());
                         addComponent(companyGrid);
                         removeComponent(employeeGrid);
+                        //companyGrid.clearSortOrder();
+                        tabSheet.setSelectedTab(tab1);
 
                         logger.info("Выбран tab1");
 
@@ -64,6 +70,7 @@ public class MainLayout extends VerticalLayout {
                         employeeGrid.setItems(employeeDao.selectAllEmployees());
                         addComponent(employeeGrid);
                         removeComponent(companyGrid);
+                        tabSheet.setSelectedTab(tab2);
 
                         logger.info("Выбран tab2");
 
@@ -77,11 +84,15 @@ public class MainLayout extends VerticalLayout {
                 companyGrid.setItems(companyDao.searchAllCompanies(search.getValue()));
                 addComponent(companyGrid);
                 removeComponent(employeeGrid);
+                tabSheet.setSelectedTab(tab1);
+
                 logger.info("Выбран tab1 с search " + search.getValue());
             } else if (tabSheet.getSelectedTab().equals(tab2)) {
                 employeeGrid.setItems(employeeDao.searchAllEmployees(search.getValue()));
                 addComponent(employeeGrid);
                 removeComponent(companyGrid);
+                tabSheet.setSelectedTab(tab2);
+
                 logger.info("Выбран tab2 с search " + search.getValue());
             }
         });

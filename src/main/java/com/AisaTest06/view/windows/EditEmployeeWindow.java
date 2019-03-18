@@ -5,8 +5,9 @@ import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.textFields.TextFieldsEmployee;
 import com.vaadin.data.HasValue;
-import com.vaadin.server.Page;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,17 +24,22 @@ public class EditEmployeeWindow extends Window {
         center();
         setClosable(true);
         setDraggable(false);
+        setModal(true);
         setContent(editVerticalLayout);
-
+        setWidth(400f,Unit.PIXELS);
+        setHeight(450f,Unit.PIXELS);
         TextFieldsEmployee textFieldsEmployee = new TextFieldsEmployee();
         TextField fullName = textFieldsEmployee.getFullName();
         DateField dateField = textFieldsEmployee.getDateField();
         TextField email = textFieldsEmployee.getEmail();
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
+
         List<Employee> employeeList = employeeDao.selectAllEmployees();
 
+
         ComboBox<Employee> selectAllEmployees = new ComboBox<>("Выбрать сотрудника");
+        selectAllEmployees.setSizeFull();
 
         selectAllEmployees.setItems(employeeList);
         selectAllEmployees.setItemCaptionGenerator(Employee::getFullName);
@@ -45,9 +51,16 @@ public class EditEmployeeWindow extends Window {
         final String[] dateArr = {""};
         final String[] emailArr = {""};
         final int[] companyIdArr = {0};
-        final String[] companyNameArr ={""};
+        final String[] companyNameArr = {""};
 
-        Button editEmployee = new Button("Редактировать сотрудника");
+        Button editEmployee = new Button("Редактировать");
+        editEmployee.setSizeFull();
+        editEmployee.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        editEmployee.setIcon(VaadinIcons.EDIT);
+
+        Button cancel = new Button("Отменить",clickEvent -> close());
+
+        cancel.setSizeFull();
 
         fullName.setRequiredIndicatorVisible(true);
         dateField.setRequiredIndicatorVisible(true);
@@ -55,7 +68,7 @@ public class EditEmployeeWindow extends Window {
 
 
         editVerticalLayout.addComponents(selectAllEmployees, fullName, dateField,
-                email, editEmployee);
+                email, editEmployee,cancel);
 
         dateField.addValueChangeListener(
                 (HasValue.ValueChangeListener<LocalDate>) valueChangeEvent -> {
@@ -79,37 +92,34 @@ public class EditEmployeeWindow extends Window {
         selectAllEmployees.addValueChangeListener(valueChangeEvent -> {
             employeeIdArr[0] = valueChangeEvent.getValue().getEmployeeId();
             companyIdArr[0] = valueChangeEvent.getValue().getEmployeeId();
-            companyNameArr[0]= valueChangeEvent.getValue().getNameCompany();
-            logger.info("Выбран сотрудник "+ valueChangeEvent.getValue());
+            companyNameArr[0] = valueChangeEvent.getValue().getNameCompany();
+            logger.info("Выбран сотрудник " + valueChangeEvent.getValue());
         });
 
 
         editEmployee.addClickListener((Button.ClickListener) clickEvent13 -> {
 
 
-          //  editVerticalLayout.removeAllComponents();
-            //  tabSheet.setSelectedTab(tab1);
             Employee employee = null;
             try {
                 employee = new Employee(employeeIdArr[0],
-                        fullNameArr[0], dateArr[0], emailArr[0], companyIdArr[0],companyNameArr[0]);
+                        fullNameArr[0], dateArr[0], emailArr[0], companyIdArr[0], companyNameArr[0]);
 
 
-            if (!(fullNameArr[0].isEmpty() || dateArr[0].isEmpty() || emailArr[0].isEmpty()||companyNameArr[0].isEmpty())) {
+                if (!(fullNameArr[0].isEmpty() || dateArr[0].isEmpty() ||
+                        emailArr[0].isEmpty() || companyNameArr[0].isEmpty())) {
 
-                employeeDao.editEmployee(employee);
-                Page.getCurrent().reload();
+                    employeeDao.editEmployee(employee);
 
 
-            }
-            else {
-                logger.warning("Неверная редакция сотрудника " + employee);
-            }
 
-            }
-            catch (NullPointerException ex){
-                logger.warning("NPE сотрудника "+ employee + " "+ ex)
-                        ;
+                } else {
+                    logger.warning("Неверная редакция сотрудника " + employee);
+                }
+
+            } catch (NullPointerException ex) {
+                logger.warning("NPE сотрудника " + employee + " " + ex)
+                ;
             }
         });
 

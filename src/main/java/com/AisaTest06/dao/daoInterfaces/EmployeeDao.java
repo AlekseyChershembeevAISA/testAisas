@@ -16,8 +16,7 @@ public interface EmployeeDao {
 
     List<Employee> selectAllEmployees();
 
-    List<Employee>searchAllEmployees(String search);
-
+    List<Employee> searchAllEmployees(String search);
 
 
 }

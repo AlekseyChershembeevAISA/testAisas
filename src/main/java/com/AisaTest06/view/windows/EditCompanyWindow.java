@@ -4,8 +4,9 @@ import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.textFields.TextFieldsCompany;
-import com.vaadin.server.Page;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -22,24 +23,35 @@ public class EditCompanyWindow extends Window {
         center();
         setClosable(true);
         setDraggable(false);
+        setModal(true);
         setContent(editWindowLayout);
+        setWidth(400f,Unit.PIXELS);
+        setHeight(500f,Unit.PIXELS);
 
 
         CompanyDao companyDao = new CompanyDaoImpl();
-        List<Company> companyList = companyDao.selectAllCompanies();
+        List companyList = companyDao.selectAllCompanies();
 
         ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
+        selectAllCompanies.setSizeFull();
 
 
         selectAllCompanies.setItems(companyList);
         selectAllCompanies.setItemCaptionGenerator(Company::getName);
         selectAllCompanies.setEmptySelectionAllowed(false);
 
-        Button editCompany = new Button("Редактировать компанию");
+        Button editCompany = new Button("Редактировать");
+        editCompany.setSizeFull();
+        editCompany.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        editCompany.setIcon(VaadinIcons.EDIT);
 
+        Button cancel = new Button("Отменить",clickEvent -> close());
+
+        cancel.setSizeFull();
         TextFieldsCompany textFieldsCompany = new TextFieldsCompany();
 
         TextField nameField = textFieldsCompany.getFullName();
+        nameField.setSizeFull();
         TextField nip = textFieldsCompany.getNip();
         TextField address = textFieldsCompany.getAddress();
         TextField phone = textFieldsCompany.getPhone();
@@ -58,7 +70,7 @@ public class EditCompanyWindow extends Window {
 
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
             companyid[0] = valueChangeEvent.getValue().getCompanyId();
-            logger.info("Выбрана компания "+ valueChangeEvent.getValue());
+            logger.info("Выбрана компания " + valueChangeEvent.getValue());
         });
 
 
@@ -76,14 +88,10 @@ public class EditCompanyWindow extends Window {
                 phoneArr[0] = valueChangeEvent.getValue());
 
 
-        editWindowLayout.addComponents(selectAllCompanies, nameField, address, nip, phone, editCompany);
+        editWindowLayout.addComponents(selectAllCompanies, nameField, address, nip, phone, editCompany,cancel);
 
 
         editCompany.addClickListener((Button.ClickListener) clickEvent15 -> {
-
-
-           // editWindowLayout.removeAllComponents();
-
 
             Company company = null;
             try {
@@ -91,37 +99,24 @@ public class EditCompanyWindow extends Window {
                         , addressArr[0], Long.parseLong(phoneArr[0]));
 
 
-            if (!(name[0].isEmpty() || NIPArr[0].isEmpty() ||
-                    addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
+                if (!(name[0].isEmpty() || NIPArr[0].isEmpty() ||
+                        addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
 
-                companyDao.editCompany(company);
-                Page.getCurrent().reload();
-            }
-            else {
-               
+                    companyDao.editCompany(company);
+                } else {
+
                     logger.warning("Неверные данные сотрудника " + company);
-                
-            }
+
+                }
             } catch (NumberFormatException ex) {
                 logger.warning("Неверная редакция компании " + ex);
-            }
-                catch (NullPointerException ex){
-                    logger.warning("NPE компании "+ company+ " "+ ex);
+            } catch (NullPointerException ex) {
+                logger.warning("NPE компании " + company + " " + ex);
             }
         });
 
 
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }
