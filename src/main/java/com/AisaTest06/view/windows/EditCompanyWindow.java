@@ -3,6 +3,7 @@ package com.AisaTest06.view.windows;
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
+import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textFields.TextFieldsCompany;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -15,8 +16,12 @@ public class EditCompanyWindow extends Window {
 
     private static Logger logger = Logger.getLogger(EditCompanyWindow.class.getName());
 
+    ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
 
-    public EditCompanyWindow() {
+    Button editCompany = new Button("Редактировать");
+
+
+    {
         setStyleName("Редактировать компанию");
         VerticalLayout editWindowLayout = new VerticalLayout();
 
@@ -25,27 +30,24 @@ public class EditCompanyWindow extends Window {
         setDraggable(false);
         setModal(true);
         setContent(editWindowLayout);
-        setWidth(400f,Unit.PIXELS);
-        setHeight(500f,Unit.PIXELS);
+        setWidth(400f, Unit.PIXELS);
+        setHeight(500f, Unit.PIXELS);
 
 
         CompanyDao companyDao = new CompanyDaoImpl();
         List companyList = companyDao.selectAllCompanies();
 
-        ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
         selectAllCompanies.setSizeFull();
-
-
         selectAllCompanies.setItems(companyList);
         selectAllCompanies.setItemCaptionGenerator(Company::getName);
         selectAllCompanies.setEmptySelectionAllowed(false);
 
-        Button editCompany = new Button("Редактировать");
+
         editCompany.setSizeFull();
         editCompany.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editCompany.setIcon(VaadinIcons.EDIT);
 
-        Button cancel = new Button("Отменить",clickEvent -> close());
+        Button cancel = new Button("Отменить", clickEvent -> close());
 
         cancel.setSizeFull();
         TextFieldsCompany textFieldsCompany = new TextFieldsCompany();
@@ -67,7 +69,6 @@ public class EditCompanyWindow extends Window {
         nip.setRequiredIndicatorVisible(true);
         address.setRequiredIndicatorVisible(true);
         phone.setRequiredIndicatorVisible(true);
-
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
             companyid[0] = valueChangeEvent.getValue().getCompanyId();
             logger.info("Выбрана компания " + valueChangeEvent.getValue());
@@ -88,7 +89,7 @@ public class EditCompanyWindow extends Window {
                 phoneArr[0] = valueChangeEvent.getValue());
 
 
-        editWindowLayout.addComponents(selectAllCompanies, nameField, address, nip, phone, editCompany,cancel);
+        editWindowLayout.addComponents(selectAllCompanies, nameField, address, nip, phone, editCompany, cancel);
 
 
         editCompany.addClickListener((Button.ClickListener) clickEvent15 -> {
@@ -103,6 +104,8 @@ public class EditCompanyWindow extends Window {
                         addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
 
                     companyDao.editCompany(company);
+                    MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
+                    MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
                 } else {
 
                     logger.warning("Неверные данные сотрудника " + company);
@@ -118,5 +121,13 @@ public class EditCompanyWindow extends Window {
 
     }
 
+    public EditCompanyWindow() {
 
+    }
+
+    public EditCompanyWindow(Company company) {
+
+
+
+    }
 }

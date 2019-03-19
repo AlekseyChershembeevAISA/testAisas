@@ -7,6 +7,7 @@ import com.AisaTest06.dao.daoInterfaces.CompanyDao;
 import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
+import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textFields.TextFieldsEmployee;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
@@ -111,6 +112,8 @@ public class AddEmployeeWindow extends Window {
                     if (!(fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty() ||
                             emailArr[0].isEmpty())) {
                         employeeDao.insertEmployee(employee);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
                     }
                 } catch (NumberFormatException ex) {
                     logger.warning("Неверные данные компании " + ex);

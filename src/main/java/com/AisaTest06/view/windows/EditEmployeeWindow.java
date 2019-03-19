@@ -3,6 +3,7 @@ package com.AisaTest06.view.windows;
 import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
+import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textFields.TextFieldsEmployee;
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
@@ -110,8 +111,8 @@ public class EditEmployeeWindow extends Window {
                         emailArr[0].isEmpty() || companyNameArr[0].isEmpty())) {
 
                     employeeDao.editEmployee(employee);
-
-
+                    MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
+                    MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
 
                 } else {
                     logger.warning("Неверная редакция сотрудника " + employee);

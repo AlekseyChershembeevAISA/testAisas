@@ -4,6 +4,7 @@ package com.AisaTest06.view.windows;
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
+import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textFields.TextFieldsCompany;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
@@ -14,11 +15,17 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.logging.Logger;
 
+import static com.AisaTest06.view.components.grids.Grids.employeeGrid;
+
 public class AddCompanyWindow extends Window {
 
     private static Logger logger = Logger.getLogger(AddCompanyWindow.class.getName());
 
+
     public AddCompanyWindow() {
+
+        Button addCompany = new Button("Добавить");
+
 
         setWidth(420f, Unit.PIXELS);
         setHeight(300f, Unit.PIXELS);
@@ -35,8 +42,6 @@ public class AddCompanyWindow extends Window {
 
         setStyleName("Добавить новую компанию");
 
-
-        Button addCompany = new Button("Добавить");
         addCompany.setStyleName(ValoTheme.BUTTON_PRIMARY);
         addCompany.setIcon(VaadinIcons.INSERT);
         addCompany.setSizeFull();
@@ -45,7 +50,6 @@ public class AddCompanyWindow extends Window {
         cancel.addClickListener(clickEvent -> close());
 
         cancel.setSizeFull();
-
 
         final int[] companyid = {0};
         final String[] companyNameArr = {""};
@@ -58,6 +62,8 @@ public class AddCompanyWindow extends Window {
         TextField nip = textFieldsCompany.getNip();
         TextField address = textFieldsCompany.getAddress();
         TextField phone = textFieldsCompany.getPhone();
+
+
         content.addComponents(name, nip, address, phone, addCompany, cancel);
 
         setContent(content);
@@ -87,7 +93,6 @@ public class AddCompanyWindow extends Window {
             if (!(companyNameArr[0].isEmpty() || NIPArr[0].isEmpty()
                     || AddressArr[0].isEmpty() || PhoneArr[0].isEmpty())) {
 
-
                 try {
 
                     company = new Company(companyid[0], companyNameArr[0], Long.parseLong(NIPArr[0])
@@ -101,6 +106,8 @@ public class AddCompanyWindow extends Window {
                     } else {
 
                         companyDao.insertCompany(company);
+                       MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
+                       MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
 
                     }
 

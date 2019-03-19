@@ -3,6 +3,7 @@ package com.AisaTest06.view.windows;
 import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
+import com.AisaTest06.view.components.layouts.MainLayout;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBoxGroup;
@@ -64,7 +65,8 @@ public class DeleteEmployeeWindow extends Window {
                 for (int i = 0; i < employeeSet.size(); i++) {
                     if (!employeeArrayList.isEmpty()) {
                         employeeDao.deleteEmployee(employeeArrayList.get(i).getEmployeeId());
-                        //  Page.getCurrent().reload();
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
                         logger.info("сотрудник  успешно удален " + employeeArrayList.get(i));
                     } else {
                         logger.warning("Невозможно удалить сотрудника");

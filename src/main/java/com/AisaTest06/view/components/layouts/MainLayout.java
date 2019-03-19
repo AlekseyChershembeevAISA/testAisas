@@ -20,12 +20,10 @@ public class MainLayout extends VerticalLayout {
 
     private static Logger logger = Logger.getLogger(MainLayout.class.getName());
 
-    static final TabSheet tabSheet = new TabSheet();
+    public static final TabSheet tabSheet = new TabSheet();
 
-    //табы
-    static HorizontalLayout tab1 = new HorizontalLayout();
-    static HorizontalLayout tab2 = new HorizontalLayout();
-
+    public static HorizontalLayout tab1 = new HorizontalLayout();
+    public static HorizontalLayout tab2 = new HorizontalLayout();
 
     public MainLayout() {
 
@@ -37,17 +35,15 @@ public class MainLayout extends VerticalLayout {
         tabSheet.setSelectedTab(tab1);
 
         HeadLayout headLayout = new HeadLayout();
-        //таблицы
+
         Grids grids = new Grids();
 
-        //таблицы с компаниями и сотрудниками
+
         Grid<Company> companyGrid = grids.gridCompanies();
         Grid<Employee> employeeGrid = grids.gridEmployees();
 
         companyGrid.setSizeFull();
         employeeGrid.setSizeFull();
-
-        grids.clearSortOrder();
 
 
         addComponent(headLayout);
@@ -61,7 +57,6 @@ public class MainLayout extends VerticalLayout {
                         companyGrid.setItems(companyDao.selectAllCompanies());
                         addComponent(companyGrid);
                         removeComponent(employeeGrid);
-                        //companyGrid.clearSortOrder();
                         tabSheet.setSelectedTab(tab1);
 
                         logger.info("Выбран tab1");
@@ -73,7 +68,6 @@ public class MainLayout extends VerticalLayout {
                         tabSheet.setSelectedTab(tab2);
 
                         logger.info("Выбран tab2");
-
                     }
                 });
 

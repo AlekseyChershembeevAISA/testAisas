@@ -3,6 +3,7 @@ package com.AisaTest06.view.windows;
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.daoInterfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
+import com.AisaTest06.view.components.layouts.MainLayout;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -63,7 +64,8 @@ public class DeleteCompanyWindow extends Window {
                 for (int i = 0; i < companySet.size(); i++) {
                     if (!listCompany.isEmpty()) {
                         companyDao.deleteCompany(listCompany.get(i).getCompanyId());
-                        //  Page.getCurrent().reload();
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
                         logger.info("компания успешно удалена " + listCompany.get(i));
                     } else {
                         logger.warning("Невозможно удалить компанию");
