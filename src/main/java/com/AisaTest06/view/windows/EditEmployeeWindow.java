@@ -1,10 +1,10 @@
 package com.AisaTest06.view.windows;
 
 import com.AisaTest06.dao.EmployeeDaoImpl;
-import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
+import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textFields.TextFieldsEmployee;
+import com.AisaTest06.view.components.textFields.fieldsEmployee;
 import com.vaadin.data.HasValue;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -30,10 +30,10 @@ public class EditEmployeeWindow extends Window {
         setWidth(400f, Unit.PIXELS);
         setHeight(350f, Unit.PIXELS);
 
-        TextFieldsEmployee textFieldsEmployee = new TextFieldsEmployee();
-        TextField fullName = textFieldsEmployee.getFullName();
-        DateField dateField = textFieldsEmployee.getDateField();
-        TextField email = textFieldsEmployee.getEmail();
+        fieldsEmployee fieldsEmployee = new fieldsEmployee();
+        TextField fullName = fieldsEmployee.getFullName();
+        DateField dateField = fieldsEmployee.getDateField();
+        TextField email = fieldsEmployee.getEmailTextField();
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
 
@@ -85,17 +85,12 @@ public class EditEmployeeWindow extends Window {
                 (HasValue.ValueChangeListener<String>) valueChangeEvent ->
                         fullNameArr[0] = valueChangeEvent.getValue());
 
-
-
         editEmployee.addClickListener((Button.ClickListener) clickEvent13 -> {
-
-
 
             try {
 
                 employee.setNameCompany(fullNameArr[0]);
                 employee.setBirthDate(dateArr[0]);
-
                 employee.setEmail(emailArr[0]);
                 employee.setFullName(fullNameArr[0]);
 
@@ -104,13 +99,13 @@ public class EditEmployeeWindow extends Window {
                         emailArr[0].isEmpty() || companyNameArr[0].isEmpty())) {
 
                     employeeDao.editEmployee(employee);
-                    MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
-                    MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
+                    MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
+                    MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
 
                 } else {
-                    textFieldsEmployee.check(fullName);
-                    textFieldsEmployee.check(dateField);
-                    textFieldsEmployee.check(email);
+                    fieldsEmployee.check(fullName);
+                    fieldsEmployee.check(dateField);
+                    fieldsEmployee.check(email);
                     logger.warning("Неверная редакция сотрудника " + employee);
                 }
 

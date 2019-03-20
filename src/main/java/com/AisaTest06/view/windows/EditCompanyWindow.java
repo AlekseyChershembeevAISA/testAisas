@@ -1,21 +1,18 @@
 package com.AisaTest06.view.windows;
 
 import com.AisaTest06.dao.CompanyDaoImpl;
-import com.AisaTest06.dao.daoInterfaces.CompanyDao;
+import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textFields.TextFieldsCompany;
-import com.vaadin.data.Binder;
+import com.AisaTest06.view.components.textFields.fieldsCompany;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import static com.AisaTest06.view.components.layouts.MainLayout.tab1;
-import static com.AisaTest06.view.components.layouts.MainLayout.tab2;
+import static com.AisaTest06.view.components.layouts.MainLayout.*;
 
 @SuppressWarnings("ALL")
 public class EditCompanyWindow extends Window {
@@ -51,80 +48,80 @@ public class EditCompanyWindow extends Window {
         Button cancel = new Button("Отменить",clickEvent -> close());
 
         cancel.setSizeFull();
-        TextFieldsCompany textFieldsCompany = new TextFieldsCompany();
+        fieldsCompany fieldsCompany = new fieldsCompany();
 
-        TextField nameField = textFieldsCompany.getFullName();
+        TextField nameField = fieldsCompany.getFullNameTextField();
         nameField.setValueChangeMode(ValueChangeMode.EAGER);
         nameField.setSizeFull();
-        TextField nip = textFieldsCompany.getNip();
-        TextField address = textFieldsCompany.getAddress();
-        TextField phone = textFieldsCompany.getPhone();
+        TextField nipField = fieldsCompany.getNipTextField();
+        TextField addressField = fieldsCompany.getAddressTextField();
+        TextField phoneField = fieldsCompany.getPhoneTextField();
 
 
-        final int[] companyid = {0};
-        final String[] name = {""};
+        final int[] companyidArr = {0};
+        final String[] nameArr = {""};
         final String[] NIPArr = {""};
         final String[] addressArr = {""};
         final String[] phoneArr = {""};
 
 
         nameField.setRequiredIndicatorVisible(true);
-        nip.setRequiredIndicatorVisible(true);
-        address.setRequiredIndicatorVisible(true);
-        phone.setRequiredIndicatorVisible(true);
+        nipField.setRequiredIndicatorVisible(true);
+        addressField.setRequiredIndicatorVisible(true);
+        phoneField.setRequiredIndicatorVisible(true);
 
 
-        companyid[0]=company.getCompanyId();
-        name[0] =company.getName();
+        companyidArr[0]=company.getCompanyId();
+        nameArr[0] =company.getName();
         NIPArr[0] = String.valueOf(company.getNip());
         addressArr[0]=company.getAddress();
         phoneArr[0] = String.valueOf(company.getPhone());
 
 
         nameField.setValue(company.getName());
-        nip.setValue(String.valueOf(company.getNip()));
-        address.setValue(company.getAddress());
-        phone.setValue(String.valueOf(company.getPhone()));
+        nipField.setValue(String.valueOf(company.getNip()));
+        addressField.setValue(company.getAddress());
+        phoneField.setValue(String.valueOf(company.getPhone()));
 
 
         nameField.addValueChangeListener(valueChangeEvent ->
-                name[0] = valueChangeEvent.getValue()
+                nameArr[0] = valueChangeEvent.getValue()
         );
 
-        nip.addValueChangeListener(valueChangeEvent ->
+        nipField.addValueChangeListener(valueChangeEvent ->
                 NIPArr[0] = valueChangeEvent.getValue());
 
-        address.addValueChangeListener(valueChangeEvent ->
+        addressField.addValueChangeListener(valueChangeEvent ->
                 addressArr[0] = valueChangeEvent.getValue());
 
-        phone.addValueChangeListener(valueChangeEvent ->
+        phoneField.addValueChangeListener(valueChangeEvent ->
                 phoneArr[0] = valueChangeEvent.getValue());
 
 
-        editWindowLayout.addComponents( nameField, address, nip, phone, editCompany,cancel);
+        editWindowLayout.addComponents( nameField, addressField, nipField, phoneField, editCompany,cancel);
 
 
         editCompany.addClickListener((Button.ClickListener) clickEvent15 -> {
 
             try {
 
-                company.setCompanyId(companyid[0]);
-                company.setName(name[0]);
+                company.setCompanyId(companyidArr[0]);
+                company.setName(nameArr[0]);
                 company.setNip(Long.parseLong(NIPArr[0]));
                 company.setAddress(addressArr[0]);
                 company.setPhone(Long.parseLong(phoneArr[0]));
 
-                if (!(name[0].isEmpty() || NIPArr[0].isEmpty() ||
+                if (!(nameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
                         addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
 
                     companyDao.editCompany(company);
-                    MainLayout.tabSheet.setSelectedTab(tab2);
-                    MainLayout.tabSheet.setSelectedTab(tab1);
+                    MainLayout.tabSheet.setSelectedTab(tabEmployee);
+                    MainLayout.tabSheet.setSelectedTab(tabCompany);
                 } else {
-                        textFieldsCompany.check(nameField);
-                        textFieldsCompany.check(nip);
-                        textFieldsCompany.check(address);
-                        textFieldsCompany.check(phone);
+                        fieldsCompany.check(nameField);
+                        fieldsCompany.check(nipField);
+                        fieldsCompany.check(addressField);
+                        fieldsCompany.check(phoneField);
                     logger.warning("Неверные данные компании " + company);
 
                 }

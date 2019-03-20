@@ -1,10 +1,11 @@
-package com.AisaTest06.dao.daoInterfaces;
+package com.AisaTest06.dao.dao.Interfaces;
 
 import com.AisaTest06.entity.Company;
 
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public interface CompanyDao {
 
     Company insertCompany(Company company);

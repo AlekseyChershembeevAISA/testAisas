@@ -2,10 +2,10 @@ package com.AisaTest06.view.windows;
 
 
 import com.AisaTest06.dao.CompanyDaoImpl;
-import com.AisaTest06.dao.daoInterfaces.CompanyDao;
+import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textFields.TextFieldsCompany;
+import com.AisaTest06.view.components.textFields.fieldsCompany;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
@@ -57,28 +57,28 @@ public class AddCompanyWindow extends Window {
         final String[] AddressArr = {""};
         final String[] PhoneArr = {""};
 
-        TextFieldsCompany textFieldsCompany = new TextFieldsCompany();
-        TextField name = textFieldsCompany.getFullName();
-        TextField nip = textFieldsCompany.getNip();
-        TextField address = textFieldsCompany.getAddress();
-        TextField phone = textFieldsCompany.getPhone();
+        fieldsCompany fieldsCompany = new fieldsCompany();
+        TextField nameTextField = fieldsCompany.getFullNameTextField();
+        TextField nipTextField = fieldsCompany.getNipTextField();
+        TextField address = fieldsCompany.getAddressTextField();
+        TextField phone = fieldsCompany.getPhoneTextField();
 
 
-        content.addComponents(name, nip, address, phone, addCompany, cancel);
+        content.addComponents(nameTextField, nipTextField, address, phone, addCompany, cancel);
 
         setContent(content);
 
-        name.setRequiredIndicatorVisible(true);
-        nip.setRequiredIndicatorVisible(true);
+        nameTextField.setRequiredIndicatorVisible(true);
+        nipTextField.setRequiredIndicatorVisible(true);
         address.setRequiredIndicatorVisible(true);
         phone.setRequiredIndicatorVisible(true);
 
 
-        name.addValueChangeListener(valueChangeEvent ->
+        nameTextField.addValueChangeListener(valueChangeEvent ->
                 companyNameArr[0] = valueChangeEvent.getValue()
         );
 
-        nip.addValueChangeListener(valueChangeEvent ->
+        nipTextField.addValueChangeListener(valueChangeEvent ->
                 NIPArr[0] = valueChangeEvent.getValue());
 
         address.addValueChangeListener(valueChangeEvent ->
@@ -106,8 +106,8 @@ public class AddCompanyWindow extends Window {
                     } else {
 
                         companyDao.insertCompany(company);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
 
                     }
 
@@ -118,10 +118,10 @@ public class AddCompanyWindow extends Window {
                 }
 
             } else {
-                textFieldsCompany.check(name);
-                textFieldsCompany.check(nip);
-                textFieldsCompany.check(address);
-                textFieldsCompany.check(phone);
+                fieldsCompany.check(nameTextField);
+                fieldsCompany.check(nipTextField);
+                fieldsCompany.check(address);
+                fieldsCompany.check(phone);
                 logger.warning("Необходимо заполнить все данные компании " +
                         companyNameArr[0] + " " + NIPArr[0] + " " + AddressArr[0] + " " + PhoneArr[0]);
             }

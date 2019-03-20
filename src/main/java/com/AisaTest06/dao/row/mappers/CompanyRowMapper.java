@@ -1,4 +1,4 @@
-package com.AisaTest06.dao.rowMappers;
+package com.AisaTest06.dao.row.mappers;
 
 import com.AisaTest06.entity.Company;
 import org.springframework.jdbc.core.RowMapper;

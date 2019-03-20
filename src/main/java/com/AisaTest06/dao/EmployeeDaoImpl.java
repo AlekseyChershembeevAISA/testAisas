@@ -1,8 +1,9 @@
 package com.AisaTest06.dao;
 
+import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
-import com.AisaTest06.dao.dataSourceConfig.DataSourceConfiguration;
-import com.AisaTest06.dao.rowMappers.EmployeeRowMapper;
+import com.AisaTest06.dao.data.source.config.DataSourceConfiguration;
+import com.AisaTest06.dao.row.mappers.EmployeeRowMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,7 +11,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class EmployeeDaoImpl implements com.AisaTest06.dao.daoInterfaces.EmployeeDao {
+@SuppressWarnings("ALL")
+public class EmployeeDaoImpl implements EmployeeDao {
 
     private static Logger logger = Logger.getLogger(CompanyDaoImpl.class.getName());
 

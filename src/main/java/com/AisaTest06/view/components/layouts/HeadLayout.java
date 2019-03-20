@@ -15,7 +15,7 @@ class HeadLayout extends HorizontalLayout {
 
     private static Logger logger = Logger.getLogger(HeadLayout.class.getName());
 
-    static TextField search;
+    static TextField searchField;
 
     HeadLayout() {
         setMargin(false);
@@ -32,23 +32,23 @@ class HeadLayout extends HorizontalLayout {
         editButton.setEnabled(false);
         editButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editButton.setIcon(VaadinIcons.EDIT);
-        search = new TextField();
+        searchField = new TextField();
 
-        search.setPlaceholder("поиск");
+        searchField.setPlaceholder("поиск");
 
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.addComponents(addButton, editButton, deleteButton);
 
 
-        addComponents(hl, search);
+        addComponents(hl, searchField);
 
-        setComponentAlignment(search, Alignment.MIDDLE_RIGHT);
+        setComponentAlignment(searchField, Alignment.MIDDLE_RIGHT);
 
         //добавляем новое окошко взависимости от выбранной табы
         addButton.addClickListener(clickEvent -> {
 
-            if (tabSheet.getSelectedTab().equals(tab1)) {
+            if (tabSheet.getSelectedTab().equals(tabCompany)) {
 
                 AddCompanyWindow addComWindow = new AddCompanyWindow();
 
@@ -56,7 +56,7 @@ class HeadLayout extends HorizontalLayout {
                 UI.getCurrent().addWindow(addComWindow);
 
 
-            } else if (tabSheet.getSelectedTab().equals(tab2)) {
+            } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
 
 
                 AddEmployeeWindow addEmployeeWindow = new AddEmployeeWindow();
@@ -67,12 +67,12 @@ class HeadLayout extends HorizontalLayout {
 
         // добавляем новое окошко для удаления компании/сотрудника
         deleteButton.addClickListener((Button.ClickListener) clickEvent -> {
-            if (tabSheet.getSelectedTab().equals(tab1)) {
+            if (tabSheet.getSelectedTab().equals(tabCompany)) {
                 DeleteCompanyWindow deleteComWindow = new DeleteCompanyWindow();
                 UI.getCurrent().addWindow(deleteComWindow);
 
 
-            } else if (tabSheet.getSelectedTab().equals(tab2)) {
+            } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
                 DeleteEmployeeWindow deleteWindow = new DeleteEmployeeWindow();
                 UI.getCurrent().addWindow(deleteWindow);
 
@@ -81,12 +81,12 @@ class HeadLayout extends HorizontalLayout {
 
         //добавляем новое окошко для редактирования компании/сотрудника
         editButton.addClickListener((Button.ClickListener) clickEvent -> {
-            if (tabSheet.getSelectedTab().equals(tab1)) {
+            if (tabSheet.getSelectedTab().equals(tabCompany)) {
                 EditCompanyWindow editComWindow = new EditCompanyWindow(new Company());
                 UI.getCurrent().addWindow(editComWindow);
 
 
-            } else if (tabSheet.getSelectedTab().equals(tab2)) {
+            } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
                 EditEmployeeWindow editWindow = new EditEmployeeWindow(new Employee());
                 UI.getCurrent().addWindow(editWindow);
 

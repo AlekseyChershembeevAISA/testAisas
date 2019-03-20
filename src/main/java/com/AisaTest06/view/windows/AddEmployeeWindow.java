@@ -3,12 +3,12 @@ package com.AisaTest06.view.windows;
 
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.EmployeeDaoImpl;
-import com.AisaTest06.dao.daoInterfaces.CompanyDao;
-import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
+import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textFields.TextFieldsEmployee;
+import com.AisaTest06.view.components.textFields.fieldsEmployee;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -47,6 +47,7 @@ public class AddEmployeeWindow extends Window {
         ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
 
 
+
         selectAllCompanies.setItems(companyList);
         selectAllCompanies.setItemCaptionGenerator(Company::getName);
         selectAllCompanies.setEmptySelectionAllowed(false);
@@ -61,11 +62,11 @@ public class AddEmployeeWindow extends Window {
 
         cancel.setSizeFull();
 
-        TextFieldsEmployee textFieldsEmployee = new TextFieldsEmployee();
+        fieldsEmployee fieldsEmployee = new fieldsEmployee();
 
-        TextField fullName = textFieldsEmployee.getFullName();
-        DateField dateField = textFieldsEmployee.getDateField();
-        TextField email = textFieldsEmployee.getEmail();
+        TextField fullNameTextField = fieldsEmployee.getFullName();
+        DateField dateField = fieldsEmployee.getDateField();
+        TextField emailField = fieldsEmployee.getEmailTextField();
 
         final String[] fullNameArr = {""};
         final String[] dateFieldArr = {""};
@@ -77,25 +78,26 @@ public class AddEmployeeWindow extends Window {
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
             companyId[0] = valueChangeEvent.getValue().getCompanyId();
             companyNameArr[0] = valueChangeEvent.getValue().getName();
+            fieldsEmployee.check(selectAllCompanies);
         });
 
-        content.addComponents(selectAllCompanies, fullName, dateField, email, addEmployee, cancel);
+        content.addComponents(selectAllCompanies, fullNameTextField, dateField, emailField, addEmployee, cancel);
 
         setContent(content);
 
-        fullName.setRequiredIndicatorVisible(true);
+        fullNameTextField.setRequiredIndicatorVisible(true);
         dateField.setRequiredIndicatorVisible(true);
-        email.setRequiredIndicatorVisible(true);
+        emailField.setRequiredIndicatorVisible(true);
 
 
-        fullName.addValueChangeListener(valueChangeEvent ->
+        fullNameTextField.addValueChangeListener(valueChangeEvent ->
                 fullNameArr[0] = valueChangeEvent.getValue()
         );
 
         dateField.addValueChangeListener(valueChangeEvent ->
                 dateFieldArr[0] = String.valueOf(valueChangeEvent.getValue()));
 
-        email.addValueChangeListener(valueChangeEvent ->
+        emailField.addValueChangeListener(valueChangeEvent ->
                 emailArr[0] = valueChangeEvent.getValue());
 
 
@@ -114,8 +116,8 @@ public class AddEmployeeWindow extends Window {
                     if (!(fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty() ||
                             emailArr[0].isEmpty())) {
                         employeeDao.insertEmployee(employee);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
                     }
                 } catch (NumberFormatException ex) {
                     logger.warning("Неверные данные компании " + ex);
@@ -123,10 +125,10 @@ public class AddEmployeeWindow extends Window {
                     logger.warning("NPE " + ex);
                 }
             } else {
-                textFieldsEmployee.check(fullName);
-                textFieldsEmployee.check(dateField);
-                textFieldsEmployee.check(email);
-                textFieldsEmployee.check(selectAllCompanies);
+                fieldsEmployee.check(fullNameTextField);
+                fieldsEmployee.check(dateField);
+                fieldsEmployee.check(emailField);
+                fieldsEmployee.check(selectAllCompanies);
 
                 logger.warning("Необходимо заполнить все данные сотрудника "
                         + fullNameArr[0] + " " + dateFieldArr[0] + " " + emailArr[0] + " " + companyId[0]);

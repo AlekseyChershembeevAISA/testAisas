@@ -1,8 +1,9 @@
 package com.AisaTest06.dao;
 
+import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
-import com.AisaTest06.dao.dataSourceConfig.DataSourceConfiguration;
-import com.AisaTest06.dao.rowMappers.CompanyRowMapper;
+import com.AisaTest06.dao.data.source.config.DataSourceConfiguration;
+import com.AisaTest06.dao.row.mappers.CompanyRowMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,7 +11,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyDao {
+@SuppressWarnings("ALL")
+public class CompanyDaoImpl implements CompanyDao {
 
     private static Logger logger = Logger.getLogger(CompanyDaoImpl.class.getName());
 
@@ -97,7 +99,7 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
 
             result = jdbcTemplate.update(DAO_DELETE_COMPANY, parameters);
 
-            logger.info("Успешно удалена компания " + companyid + " " + companyid);
+            logger.info("Успешно удалена компания " + companyid);
 
             return result;
         } catch (DataAccessException d) {
@@ -132,7 +134,7 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
     }
 
 
-    private static String DAO_SEARCH_ALL_COMPANIES(String search) {
+    private static String dao_search_all_companies(String search) {
         String filterLike = "" + "'%" + search + "%' ";
 
         return "select*from companies where " +
@@ -159,7 +161,7 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
                 company.setAddress(company.getAddress());
                 company.setNip(company.getNip());
                 company.setPhone(company.getPhone());
-                listCompanies = jdbcTemplate.query(DAO_SEARCH_ALL_COMPANIES(search), new CompanyRowMapper());
+                listCompanies = jdbcTemplate.query(dao_search_all_companies(search), new CompanyRowMapper());
 
                 logger.info("Успешно найдены искомые компании по строке " + search);
                 return listCompanies;
@@ -170,6 +172,10 @@ public class CompanyDaoImpl implements com.AisaTest06.dao.daoInterfaces.CompanyD
             }
         } catch (DataAccessException d) {
             logger.warning("Ошибка при поиске компании по строке " + d);
+            return null;
+        }
+        catch (NullPointerException ex){
+            logger.warning("NPE при поиске по слову "+ ex);
             return null;
         }
     }

@@ -1,4 +1,4 @@
-package com.AisaTest06.dao.dataSourceConfig;
+package com.AisaTest06.dao.data.source.config;
 
 
 import org.apache.commons.dbcp.BasicDataSource;

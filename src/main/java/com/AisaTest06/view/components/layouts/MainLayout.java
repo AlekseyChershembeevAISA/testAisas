@@ -2,8 +2,8 @@ package com.AisaTest06.view.components.layouts;
 
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.EmployeeDaoImpl;
-import com.AisaTest06.dao.daoInterfaces.CompanyDao;
-import com.AisaTest06.dao.daoInterfaces.EmployeeDao;
+import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.grids.Grids;
@@ -12,9 +12,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
-import static com.AisaTest06.view.components.layouts.HeadLayout.search;
-
 import java.util.logging.Logger;
+
+import static com.AisaTest06.view.components.layouts.HeadLayout.searchField;
+
 
 @SuppressWarnings("ALL")
 public class MainLayout extends VerticalLayout {
@@ -23,17 +24,17 @@ public class MainLayout extends VerticalLayout {
 
     public static final TabSheet tabSheet = new TabSheet();
 
-    public static final HorizontalLayout tab1 = new HorizontalLayout();
-    public static final HorizontalLayout tab2 = new HorizontalLayout();
+    public static final HorizontalLayout tabCompany = new HorizontalLayout();
+    public static final HorizontalLayout tabEmployee = new HorizontalLayout();
 
     public MainLayout() {
 
         CompanyDao companyDao = new CompanyDaoImpl();
         EmployeeDao employeeDao = new EmployeeDaoImpl();
 
-        tabSheet.addTab(tab1, "Компании");
-        tabSheet.addTab(tab2, "Сотрудники");
-        // tabSheet.setSelectedTab(tab1);
+        tabSheet.addTab(tabCompany, "Компании");
+        tabSheet.addTab(tabEmployee, "Сотрудники");
+        // tabSheet.setSelectedTab(tabCompany);
 
         HeadLayout headLayout = new HeadLayout();
 
@@ -54,41 +55,41 @@ public class MainLayout extends VerticalLayout {
 
         tabSheet.addSelectedTabChangeListener(
                 (TabSheet.SelectedTabChangeListener) e -> {
-                    if (tabSheet.getSelectedTab().equals(tab1)) {
+                    if (tabSheet.getSelectedTab().equals(tabCompany)) {
                         companyGrid.setItems(companyDao.selectAllCompanies());
                         addComponent(companyGrid);
                         removeComponent(employeeGrid);
-                        // tabSheet.setSelectedTab(tab1);
+                        // tabSheet.setSelectedTab(tabCompany);
 
-                        logger.info("Выбран tab1");
+                        logger.info("Выбран tabCompany");
 
-                    } else if (tabSheet.getSelectedTab().equals(tab2)) {
+                    } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
                         employeeGrid.setItems(employeeDao.selectAllEmployees());
                         addComponent(employeeGrid);
                         removeComponent(companyGrid);
-                        //tabSheet.setSelectedTab(tab2);
+                        //tabSheet.setSelectedTab(tabEmployee);
 
-                        logger.info("Выбран tab2");
+                        logger.info("Выбран tabEmployee");
                     }
                 });
 
         companyGrid.setItems(companyDao.selectAllCompanies());
 
-        search.addValueChangeListener(e -> {
-            if (tabSheet.getSelectedTab().equals(tab1)) {
-                companyGrid.setItems(companyDao.searchAllCompanies(search.getValue()));
+        searchField.addValueChangeListener(e -> {
+            if (tabSheet.getSelectedTab().equals(tabCompany)) {
+                companyGrid.setItems(companyDao.searchAllCompanies(searchField.getValue()));
                 addComponent(companyGrid);
                 removeComponent(employeeGrid);
-                // tabSheet.setSelectedTab(tab1);
+                // tabSheet.setSelectedTab(tabCompany);
 
-                logger.info("Выбран tab1 с search " + search.getValue());
-            } else if (tabSheet.getSelectedTab().equals(tab2)) {
-                employeeGrid.setItems(employeeDao.searchAllEmployees(search.getValue()));
+                logger.info("Выбран tabCompany с search " + searchField.getValue());
+            } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
+                employeeGrid.setItems(employeeDao.searchAllEmployees(searchField.getValue()));
                 addComponent(employeeGrid);
                 removeComponent(companyGrid);
-                // tabSheet.setSelectedTab(tab2);
+                // tabSheet.setSelectedTab(tabEmployee);
 
-                logger.info("Выбран tab2 с search " + search.getValue());
+                logger.info("Выбран tabEmployee с search " + searchField.getValue());
             }
         });
 
