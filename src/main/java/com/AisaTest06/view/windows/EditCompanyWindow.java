@@ -37,9 +37,6 @@ public class EditCompanyWindow extends Window {
 
         CompanyDao companyDao = new CompanyDaoImpl();
 
-
-
-
         Button editCompany = new Button("Редактировать");
         editCompany.setSizeFull();
         editCompany.setStyleName(ValoTheme.BUTTON_FRIENDLY);

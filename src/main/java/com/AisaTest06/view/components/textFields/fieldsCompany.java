@@ -14,7 +14,7 @@ public class fieldsCompany extends TextField {
     private TextField nipTextField;
     private TextField phoneTextField;
 
-//    final Binder<Company> binder = new Binder<>(Company.class);
+
 
 
     public fieldsCompany() {

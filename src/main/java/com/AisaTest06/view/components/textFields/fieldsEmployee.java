@@ -1,7 +1,6 @@
 package com.AisaTest06.view.components.textFields;
 
 
-import com.AisaTest06.entity.Company;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -10,7 +9,7 @@ import com.vaadin.ui.TextField;
 import java.util.logging.Logger;
 
 
-//ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
+
 @SuppressWarnings("ALL")
 
 
@@ -21,16 +20,7 @@ public class fieldsEmployee extends TextField {
     private TextField emailTextField;
 
 
-//    public ComboBox<Company>getComboboxComapny(){
-//        ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
-//
-//        selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
-//            if (selectAllCompanies.)
-//
-//        });
 
-//        return selectAllCompanies;
-//    }
 
     public TextField getFullName() {
         TextField fullName = new TextField("ФИО");

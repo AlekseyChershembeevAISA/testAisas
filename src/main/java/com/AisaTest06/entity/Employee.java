@@ -2,6 +2,7 @@ package com.AisaTest06.entity;
 
 import java.util.Objects;
 
+@SuppressWarnings("ALL")
 public class Employee {
     private int employeeId;
     private String fullName;
