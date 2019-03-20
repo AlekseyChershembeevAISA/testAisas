@@ -27,7 +27,8 @@ public class DeleteEmployeeWindow extends Window {
         setClosable(true);
         setDraggable(false);
         setModal(true);
-        setWidth(270f,Unit.PIXELS);
+        setWidth(270f, Unit.PIXELS);
+        //setResizeLazy(true);
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
 

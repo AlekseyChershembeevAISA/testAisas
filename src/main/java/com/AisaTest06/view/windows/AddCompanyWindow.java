@@ -15,8 +15,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.logging.Logger;
 
-import static com.AisaTest06.view.components.grids.Grids.employeeGrid;
-
+@SuppressWarnings("ALL")
 public class AddCompanyWindow extends Window {
 
     private static Logger logger = Logger.getLogger(AddCompanyWindow.class.getName());
@@ -37,6 +36,7 @@ public class AddCompanyWindow extends Window {
         setClosable(true);
         setDraggable(false);
         setModal(true);
+        //setResizeLazy(true);
 
         CompanyDao companyDao = new CompanyDaoImpl();
 
@@ -106,8 +106,8 @@ public class AddCompanyWindow extends Window {
                     } else {
 
                         companyDao.insertCompany(company);
-                       MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
-                       MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
+                        MainLayout.tabSheet.setSelectedTab(MainLayout.tab1);
 
                     }
 
@@ -118,6 +118,10 @@ public class AddCompanyWindow extends Window {
                 }
 
             } else {
+                textFieldsCompany.check(name);
+                textFieldsCompany.check(nip);
+                textFieldsCompany.check(address);
+                textFieldsCompany.check(phone);
                 logger.warning("Необходимо заполнить все данные компании " +
                         companyNameArr[0] + " " + NIPArr[0] + " " + AddressArr[0] + " " + PhoneArr[0]);
             }

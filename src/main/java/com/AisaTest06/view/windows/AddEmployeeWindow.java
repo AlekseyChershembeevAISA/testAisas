@@ -9,14 +9,15 @@ import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textFields.TextFieldsEmployee;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import java.lang.String;
 
 import java.util.List;
 import java.util.logging.Logger;
 
+@SuppressWarnings("ALL")
 public class AddEmployeeWindow extends Window {
 
 
@@ -37,6 +38,7 @@ public class AddEmployeeWindow extends Window {
         center();
         setClosable(true);
         setDraggable(false);
+        //setResizeLazy(true);
 
         setStyleName("Добавить нового сотрудника");
 
@@ -55,7 +57,7 @@ public class AddEmployeeWindow extends Window {
         addEmployee.setIcon(VaadinIcons.INSERT);
 
 
-        Button cancel = new Button("Отменить",clickEvent -> close());
+        Button cancel = new Button("Отменить", clickEvent -> close());
 
         cancel.setSizeFull();
 
@@ -77,7 +79,7 @@ public class AddEmployeeWindow extends Window {
             companyNameArr[0] = valueChangeEvent.getValue().getName();
         });
 
-        content.addComponents(selectAllCompanies,fullName,dateField,email,addEmployee,cancel);
+        content.addComponents(selectAllCompanies, fullName, dateField, email, addEmployee, cancel);
 
         setContent(content);
 
@@ -121,6 +123,11 @@ public class AddEmployeeWindow extends Window {
                     logger.warning("NPE " + ex);
                 }
             } else {
+                textFieldsEmployee.check(fullName);
+                textFieldsEmployee.check(dateField);
+                textFieldsEmployee.check(email);
+                textFieldsEmployee.check(selectAllCompanies);
+
                 logger.warning("Необходимо заполнить все данные сотрудника "
                         + fullNameArr[0] + " " + dateFieldArr[0] + " " + emailArr[0] + " " + companyId[0]);
             }

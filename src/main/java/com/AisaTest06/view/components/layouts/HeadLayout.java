@@ -1,11 +1,10 @@
 package com.AisaTest06.view.components.layouts;
 
+import com.AisaTest06.entity.Company;
+import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.windows.*;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.logging.Logger;
@@ -21,7 +20,7 @@ class HeadLayout extends HorizontalLayout {
     HeadLayout() {
         setMargin(false);
         setSpacing(true);
-
+        setSizeFull();
 
         Button addButton = new Button("Добавить");
         addButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -30,15 +29,21 @@ class HeadLayout extends HorizontalLayout {
         deleteButton.setStyleName(ValoTheme.BUTTON_DANGER);
         deleteButton.setIcon(VaadinIcons.MINUS);
         Button editButton = new Button("Редактировать");
+        editButton.setEnabled(false);
         editButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editButton.setIcon(VaadinIcons.EDIT);
         search = new TextField();
 
         search.setPlaceholder("поиск");
-        search.setSizeFull();
 
 
-        addComponents(addButton, editButton, deleteButton, search);
+        HorizontalLayout hl = new HorizontalLayout();
+        hl.addComponents(addButton, editButton, deleteButton);
+
+
+        addComponents(hl, search);
+
+        setComponentAlignment(search, Alignment.MIDDLE_RIGHT);
 
         //добавляем новое окошко взависимости от выбранной табы
         addButton.addClickListener(clickEvent -> {
@@ -77,12 +82,12 @@ class HeadLayout extends HorizontalLayout {
         //добавляем новое окошко для редактирования компании/сотрудника
         editButton.addClickListener((Button.ClickListener) clickEvent -> {
             if (tabSheet.getSelectedTab().equals(tab1)) {
-                EditCompanyWindow editComWindow = new EditCompanyWindow();
+                EditCompanyWindow editComWindow = new EditCompanyWindow(new Company());
                 UI.getCurrent().addWindow(editComWindow);
 
 
             } else if (tabSheet.getSelectedTab().equals(tab2)) {
-                EditEmployeeWindow editWindow = new EditEmployeeWindow();
+                EditEmployeeWindow editWindow = new EditEmployeeWindow(new Employee());
                 UI.getCurrent().addWindow(editWindow);
 
             }

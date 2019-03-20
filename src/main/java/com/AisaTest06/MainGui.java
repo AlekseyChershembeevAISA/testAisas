@@ -25,7 +25,6 @@ public class MainGui extends UI {
 
         MainLayout mainLayout = new MainLayout();
 
-
         setContent(mainLayout);
         logger.info("UI загружен");
 

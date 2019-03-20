@@ -2,25 +2,25 @@ package com.AisaTest06.view.components.textFields;
 
 
 import com.vaadin.server.UserError;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 
+@SuppressWarnings("ALL")
 public class TextFieldsEmployee extends TextField {
 
 
-    private TextField fullName;
-    private DateField dateField;
     private TextField email;
 
     public TextField getFullName() {
-        fullName = new TextField("ФИО");
+        TextField fullName = new TextField("ФИО");
         fullName.setSizeFull();
         return fullName;
     }
 
     public DateField getDateField() {
 
-        dateField = new DateField("Дата рождения");
+        DateField dateField = new DateField("Дата рождения");
         dateField.setSizeFull();
 
 
@@ -45,9 +45,35 @@ public class TextFieldsEmployee extends TextField {
             }
 
 
-
         });
         return email;
 
     }
+
+    public void check(TextField textField) {
+
+        if (textField.getValue().isEmpty()) {
+            textField.setComponentError(new UserError("Необходимо заполнить все поля"));
+        } else {
+            textField.setComponentError(null);
+        }
+
+    }
+
+    public void check(DateField dateField) {
+        if (dateField.isEmpty()) {
+            dateField.setComponentError(new UserError("Необходимо заполнить все поля"));
+        } else {
+            dateField.setComponentError(null);
+        }
+    }
+
+    public void check(ComboBox comboBox) {
+        if (comboBox.isEmpty()) {
+            comboBox.setComponentError(new UserError("Необходимо заполнить все поля"));
+        } else {
+            comboBox.setComponentError(null);
+        }
+    }
+
 }

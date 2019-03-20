@@ -16,14 +16,15 @@ import static com.AisaTest06.view.components.layouts.HeadLayout.search;
 
 import java.util.logging.Logger;
 
+@SuppressWarnings("ALL")
 public class MainLayout extends VerticalLayout {
 
     private static Logger logger = Logger.getLogger(MainLayout.class.getName());
 
     public static final TabSheet tabSheet = new TabSheet();
 
-    public static HorizontalLayout tab1 = new HorizontalLayout();
-    public static HorizontalLayout tab2 = new HorizontalLayout();
+    public static final HorizontalLayout tab1 = new HorizontalLayout();
+    public static final HorizontalLayout tab2 = new HorizontalLayout();
 
     public MainLayout() {
 
@@ -32,14 +33,14 @@ public class MainLayout extends VerticalLayout {
 
         tabSheet.addTab(tab1, "Компании");
         tabSheet.addTab(tab2, "Сотрудники");
-        tabSheet.setSelectedTab(tab1);
+        // tabSheet.setSelectedTab(tab1);
 
         HeadLayout headLayout = new HeadLayout();
 
         Grids grids = new Grids();
 
 
-        Grid<Company> companyGrid = grids.gridCompanies();
+        Grid<Company> companyGrid = Grids.gridCompanies();
         Grid<Employee> employeeGrid = grids.gridEmployees();
 
         companyGrid.setSizeFull();
@@ -57,7 +58,7 @@ public class MainLayout extends VerticalLayout {
                         companyGrid.setItems(companyDao.selectAllCompanies());
                         addComponent(companyGrid);
                         removeComponent(employeeGrid);
-                        tabSheet.setSelectedTab(tab1);
+                        // tabSheet.setSelectedTab(tab1);
 
                         logger.info("Выбран tab1");
 
@@ -65,7 +66,7 @@ public class MainLayout extends VerticalLayout {
                         employeeGrid.setItems(employeeDao.selectAllEmployees());
                         addComponent(employeeGrid);
                         removeComponent(companyGrid);
-                        tabSheet.setSelectedTab(tab2);
+                        //tabSheet.setSelectedTab(tab2);
 
                         logger.info("Выбран tab2");
                     }
@@ -78,14 +79,14 @@ public class MainLayout extends VerticalLayout {
                 companyGrid.setItems(companyDao.searchAllCompanies(search.getValue()));
                 addComponent(companyGrid);
                 removeComponent(employeeGrid);
-                tabSheet.setSelectedTab(tab1);
+                // tabSheet.setSelectedTab(tab1);
 
                 logger.info("Выбран tab1 с search " + search.getValue());
             } else if (tabSheet.getSelectedTab().equals(tab2)) {
                 employeeGrid.setItems(employeeDao.searchAllEmployees(search.getValue()));
                 addComponent(employeeGrid);
                 removeComponent(companyGrid);
-                tabSheet.setSelectedTab(tab2);
+                // tabSheet.setSelectedTab(tab2);
 
                 logger.info("Выбран tab2 с search " + search.getValue());
             }

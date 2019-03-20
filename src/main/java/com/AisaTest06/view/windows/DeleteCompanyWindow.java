@@ -14,17 +14,19 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 
+@SuppressWarnings("ALL")
 public class DeleteCompanyWindow extends Window {
 
     private static Logger logger = Logger.getLogger(DeleteCompanyWindow.class.getName());
 
     public DeleteCompanyWindow() {
         setStyleName("Удалить компанию");
-        setWidth(270f,Unit.PIXELS);
+        setWidth(270f, Unit.PIXELS);
         center();
         setClosable(true);
         setDraggable(false);
         setModal(true);
+        //setResizeLazy(true);
 
         CompanyDao companyDao = new CompanyDaoImpl();
 

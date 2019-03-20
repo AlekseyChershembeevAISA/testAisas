@@ -11,14 +11,14 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.logging.Logger;
 
+@SuppressWarnings("ALL")
 public class EditEmployeeWindow extends Window {
 
     private static Logger logger = Logger.getLogger(EditEmployeeWindow.class.getName());
 
-    public EditEmployeeWindow() {
+    public EditEmployeeWindow(Employee employee) {
         setStyleName("Редактировать сотрудника");
         VerticalLayout editVerticalLayout = new VerticalLayout();
 
@@ -27,8 +27,9 @@ public class EditEmployeeWindow extends Window {
         setDraggable(false);
         setModal(true);
         setContent(editVerticalLayout);
-        setWidth(400f,Unit.PIXELS);
-        setHeight(450f,Unit.PIXELS);
+        setWidth(400f, Unit.PIXELS);
+        setHeight(350f, Unit.PIXELS);
+
         TextFieldsEmployee textFieldsEmployee = new TextFieldsEmployee();
         TextField fullName = textFieldsEmployee.getFullName();
         DateField dateField = textFieldsEmployee.getDateField();
@@ -36,30 +37,20 @@ public class EditEmployeeWindow extends Window {
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
 
-        List<Employee> employeeList = employeeDao.selectAllEmployees();
 
 
-        ComboBox<Employee> selectAllEmployees = new ComboBox<>("Выбрать сотрудника");
-        selectAllEmployees.setSizeFull();
+        final String[] fullNameArr = {employee.getFullName()};
+        final String[] dateArr = {employee.getBirthDate()};
+        final String[] emailArr = {employee.getEmail()};
 
-        selectAllEmployees.setItems(employeeList);
-        selectAllEmployees.setItemCaptionGenerator(Employee::getFullName);
-        selectAllEmployees.setEmptySelectionAllowed(false);
-
-
-        final int[] employeeIdArr = {0};
-        final String[] fullNameArr = {""};
-        final String[] dateArr = {""};
-        final String[] emailArr = {""};
-        final int[] companyIdArr = {0};
-        final String[] companyNameArr = {""};
+        final String[] companyNameArr = {employee.getNameCompany()};
 
         Button editEmployee = new Button("Редактировать");
         editEmployee.setSizeFull();
         editEmployee.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editEmployee.setIcon(VaadinIcons.EDIT);
 
-        Button cancel = new Button("Отменить",clickEvent -> close());
+        Button cancel = new Button("Отменить", clickEvent -> close());
 
         cancel.setSizeFull();
 
@@ -67,14 +58,23 @@ public class EditEmployeeWindow extends Window {
         dateField.setRequiredIndicatorVisible(true);
         email.setRequiredIndicatorVisible(true);
 
+        fullName.setValue(fullNameArr[0]);
+        dateField.setValue(LocalDate.parse(dateArr[0]));
+        email.setValue(emailArr[0]);
 
-        editVerticalLayout.addComponents(selectAllEmployees, fullName, dateField,
-                email, editEmployee,cancel);
+
+        editVerticalLayout.addComponents(fullName, dateField,
+                email, editEmployee, cancel);
 
         dateField.addValueChangeListener(
                 (HasValue.ValueChangeListener<LocalDate>) valueChangeEvent -> {
                     LocalDate date = valueChangeEvent.getValue();
-                    dateArr[0] = date.toString();
+                    try {
+                        dateArr[0] = date.toString();
+                    }catch (NullPointerException ex){
+                        logger.warning("NPE не заполнена дата рождения " + ex);
+                    }
+
                 });
 
         email.addValueChangeListener(
@@ -86,25 +86,18 @@ public class EditEmployeeWindow extends Window {
                         fullNameArr[0] = valueChangeEvent.getValue());
 
 
-        selectAllEmployees.setItems(employeeList);
-        selectAllEmployees.setItemCaptionGenerator(Employee::getFullName);
-
-
-        selectAllEmployees.addValueChangeListener(valueChangeEvent -> {
-            employeeIdArr[0] = valueChangeEvent.getValue().getEmployeeId();
-            companyIdArr[0] = valueChangeEvent.getValue().getEmployeeId();
-            companyNameArr[0] = valueChangeEvent.getValue().getNameCompany();
-            logger.info("Выбран сотрудник " + valueChangeEvent.getValue());
-        });
-
 
         editEmployee.addClickListener((Button.ClickListener) clickEvent13 -> {
 
 
-            Employee employee = null;
+
             try {
-                employee = new Employee(employeeIdArr[0],
-                        fullNameArr[0], dateArr[0], emailArr[0], companyIdArr[0], companyNameArr[0]);
+
+                employee.setNameCompany(fullNameArr[0]);
+                employee.setBirthDate(dateArr[0]);
+
+                employee.setEmail(emailArr[0]);
+                employee.setFullName(fullNameArr[0]);
 
 
                 if (!(fullNameArr[0].isEmpty() || dateArr[0].isEmpty() ||
@@ -115,6 +108,9 @@ public class EditEmployeeWindow extends Window {
                     MainLayout.tabSheet.setSelectedTab(MainLayout.tab2);
 
                 } else {
+                    textFieldsEmployee.check(fullName);
+                    textFieldsEmployee.check(dateField);
+                    textFieldsEmployee.check(email);
                     logger.warning("Неверная редакция сотрудника " + employee);
                 }
 

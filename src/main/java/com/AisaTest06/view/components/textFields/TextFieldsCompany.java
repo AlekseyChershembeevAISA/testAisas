@@ -1,9 +1,10 @@
 package com.AisaTest06.view.components.textFields;
 
 
+import com.AisaTest06.entity.Company;
+import com.vaadin.data.Binder;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.logging.Logger;
 
@@ -16,6 +17,8 @@ public class TextFieldsCompany extends TextField {
     private TextField address;
     private TextField phone;
     private TextField fullName;
+
+    final Binder<Company> binder = new Binder<>(Company.class);
 
 
     public TextFieldsCompany() {
@@ -31,7 +34,7 @@ public class TextFieldsCompany extends TextField {
 
     public TextField getFullName() {
         fullName = new TextField("Имя компании");
-        fullName.setWidth(80,Unit.PERCENTAGE);
+        fullName.setWidth(80, Unit.PERCENTAGE);
         return fullName;
     }
 
@@ -63,7 +66,16 @@ public class TextFieldsCompany extends TextField {
         return nip;
     }
 
+    public void check(TextField textField) {
 
+        if (textField.getValue().isEmpty()) {
+            textField.setComponentError(new UserError("Необходимо заполнить все поля"));
+        } else {
+            textField.setComponentError(null);
+        }
+
+
+    }
 }
 
 
