@@ -18,8 +18,11 @@ public class fieldsCompany extends TextField {
     public fieldsCompany() {
 
     }
-
-    public TextField getAddressTextField() {
+    /*
+    Проверка на заполеннность адреса
+   */
+    public TextField getAddressTextField()
+    {
         TextField addressTextField = new TextField("Адрес");
         addressTextField.addValueChangeListener(valueChangeEvent -> {
             if (!(valueChangeEvent.getValue().length()>0)){
@@ -34,7 +37,9 @@ public class fieldsCompany extends TextField {
 
         return addressTextField;
     }
-
+    /*
+    Проверка на заполеннность имени компании
+   */
     public TextField getFullNameTextField() {
         TextField fullNameTextField = new TextField("Имя компании");
 
@@ -49,7 +54,9 @@ public class fieldsCompany extends TextField {
         fullNameTextField.setWidth(80, Unit.PERCENTAGE);
         return fullNameTextField;
     }
-
+    /*
+    Проверка на заполеннность телефона компании
+   */
     public TextField getPhoneTextField() {
         phoneTextField = new TextField("Телефон");
         phoneTextField.setSizeFull();
@@ -64,7 +71,9 @@ public class fieldsCompany extends TextField {
         });
         return phoneTextField;
     }
-
+    /*
+    Проверка на заполеннность ИНН компании
+   */
     public TextField getNipTextField() {
         nipTextField = new TextField("ИНН");
         nipTextField.setSizeFull();
@@ -79,7 +88,9 @@ public class fieldsCompany extends TextField {
         });
         return nipTextField;
     }
-
+    /*
+    Проверка на заполеннность TextField компании
+   */
     public void check(TextField textField) {
 
         if (textField.getValue().isEmpty()) {

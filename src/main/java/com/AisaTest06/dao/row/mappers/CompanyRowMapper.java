@@ -7,6 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CompanyRowMapper implements RowMapper {
+
+    /**
+    Сопоставляем данные каждой строки компании
+    **/
     @Override
     public Object mapRow(ResultSet rs, int i) throws SQLException {
         Company company = new Company();

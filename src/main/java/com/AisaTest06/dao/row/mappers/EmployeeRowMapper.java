@@ -7,6 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EmployeeRowMapper implements RowMapper {
+
+    /**
+    Сопоставляем данные каждой строки сотрудника
+   **/
     @Override
     public Object mapRow(ResultSet rs, int i) throws SQLException {
         Employee employee = new Employee();

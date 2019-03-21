@@ -24,7 +24,9 @@ public class DataSourceConfiguration {
         dataSource.setPassword("123");
         return dataSource;
     }
-
+    /**
+    соеденинение с БД всегда в 1 экземпляре
+    **/
     public static synchronized BasicDataSource getInstance() {
         if (dataSource == null) {
             dataSource = dataSource();

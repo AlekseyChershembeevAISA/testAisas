@@ -46,7 +46,7 @@ class HeadLayout extends HorizontalLayout {
 
         setComponentAlignment(searchField, Alignment.MIDDLE_RIGHT);
 
-        //добавляем новое окошко взависимости от выбранной табы
+        /*Добавляем новое окошко взависимости от выбранной табы при нажатии кнопки Добавить*/
         addButton.addClickListener(clickEvent -> {
 
             if (tabSheet.getSelectedTab().equals(tabCompany)) {
@@ -66,7 +66,9 @@ class HeadLayout extends HorizontalLayout {
             }
         });
 
-        // добавляем новое окошко для удаления компании/сотрудника
+         /*
+         Добавляем новое окошко для удаления компании/сотрудника при нажатии кнопки Удалить
+         */
         deleteButton.addClickListener((Button.ClickListener) clickEvent -> {
             if (tabSheet.getSelectedTab().equals(tabCompany)) {
                 DeleteCompanyWindow deleteComWindow = new DeleteCompanyWindow();

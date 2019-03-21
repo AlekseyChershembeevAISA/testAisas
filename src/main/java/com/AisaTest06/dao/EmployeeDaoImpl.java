@@ -1,16 +1,14 @@
 package com.AisaTest06.dao;
 
 import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
-import com.AisaTest06.entity.Company;
-import com.AisaTest06.entity.Employee;
 import com.AisaTest06.dao.data.source.config.DataSourceConfiguration;
 import com.AisaTest06.dao.row.mappers.EmployeeRowMapper;
+import com.AisaTest06.entity.Company;
+import com.AisaTest06.entity.Employee;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 

@@ -19,7 +19,9 @@ public class fieldsEmployee extends TextField {
 
     private TextField emailTextField;
 
-
+    /*
+    Проверка на заполеннность поля ФИО
+    */
     public TextField getFullName() {
         TextField fullName = new TextField("ФИО");
 
@@ -34,7 +36,9 @@ public class fieldsEmployee extends TextField {
         fullName.setSizeFull();
         return fullName;
     }
-
+    /*
+    Проверка на выбор даты "Дата Рождения"
+    */
     public DateField getDateField() {
 
         DateField dateField = new DateField("Дата рождения");
@@ -52,7 +56,9 @@ public class fieldsEmployee extends TextField {
 
         return dateField;
     }
-
+    /*
+    Проверка на заполеннность поля email
+    */
     public TextField getEmailTextField() {
 
         emailTextField = new TextField("email");
@@ -79,7 +85,9 @@ public class fieldsEmployee extends TextField {
         return emailTextField;
 
     }
-
+    /*
+    Проверка на заполеннность TextField
+    */
     public void check(TextField textField) {
 
         if (textField.getValue().isEmpty()) {
@@ -91,7 +99,9 @@ public class fieldsEmployee extends TextField {
         }
 
     }
-
+    /*
+    Проверка на заполеннность поля DateField
+    */
     public void check(DateField dateField) {
         if (dateField.isEmpty()) {
             dateField.setComponentError(new UserError("Необходимо заполнить поле "+dateField.getCaption() ));
@@ -101,7 +111,9 @@ public class fieldsEmployee extends TextField {
             dateField.setComponentError(null);
         }
     }
-
+    /*
+    Проверка на заполеннность Combobox
+    */
     public void check(ComboBox comboBox) {
         if (comboBox.isEmpty()) {
             comboBox.setComponentError(new UserError("Необходимо "+ comboBox.getCaption()));

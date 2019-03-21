@@ -64,7 +64,6 @@ public class CompanyDaoImpl implements CompanyDao {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         try {
             parameters.addValue("companyid", company.getCompanyId());
-
             parameters.addValue("name", company.getName());
             parameters.addValue("nip", company.getNip());
             parameters.addValue("address", company.getAddress());
@@ -128,7 +127,9 @@ public class CompanyDaoImpl implements CompanyDao {
 
     }
 
-
+    /**
+    Метод для запроса в БД по точному поиску слова в компании
+    **/
     private static String dao_search_all_companies(String search) {
         String filterLike = "" + "'%" + search + "%' ";
 
@@ -184,8 +185,8 @@ public class CompanyDaoImpl implements CompanyDao {
     public boolean checkCompanyByName(String name) {
 
         MapSqlParameterSource parametres = new MapSqlParameterSource();
-        parametres.addValue("name", name);
-
+        parametres.addValue("name", name)
+        ;
         try {
 
             Integer count = jdbcTemplate.queryForObject(DAO_CHECK_COMPANY_BY_NAME, parametres, Integer.class);

@@ -51,6 +51,9 @@ public class MainLayout extends VerticalLayout {
         addComponent(tabSheet);
         addComponent(companyGrid);
 
+        /*
+        Заполняем Grid в зависимости от выбранной вкладки
+        */
 
         tabSheet.addSelectedTabChangeListener(
                 (TabSheet.SelectedTabChangeListener) e -> {
@@ -70,6 +73,9 @@ public class MainLayout extends VerticalLayout {
 
         companyGrid.setItems(companyDao.selectAllCompanies());
 
+        /*
+        Заполняем Grid по фильтру из searchField
+        */
         searchField.addValueChangeListener(e -> {
             if (tabSheet.getSelectedTab().equals(tabCompany)) {
                 companyGrid.setItems(companyDao.searchAllCompanies(searchField.getValue()));
