@@ -6,6 +6,7 @@ import com.vaadin.ui.TextField;
 
 import java.util.logging.Logger;
 
+@SuppressWarnings("ALL")
 public class fieldsCompany extends TextField {
 
     private static Logger logger = Logger.getLogger(fieldsCompany.class.getName());
@@ -13,9 +14,6 @@ public class fieldsCompany extends TextField {
 
     private TextField nipTextField;
     private TextField phoneTextField;
-
-
-
 
     public fieldsCompany() {
 

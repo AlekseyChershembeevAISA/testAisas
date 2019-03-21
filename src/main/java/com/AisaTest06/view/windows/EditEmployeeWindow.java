@@ -101,6 +101,7 @@ public class EditEmployeeWindow extends Window {
                     employeeDao.editEmployee(employee);
                     MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
                     MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+                    close();
 
                 } else {
                     fieldsEmployee.check(fullName);

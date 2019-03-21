@@ -8,12 +8,12 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public interface CompanyDao {
 
-    Company insertCompany(Company company);
+    void insertCompany(Company company);
 
-    Company editCompany(Company company);
+    void editCompany(Company company);
 
     //будем удалять по id
-    int deleteCompany(int companyid);
+    void deleteCompany(int companyid);
 
     List selectAllCompanies();
 

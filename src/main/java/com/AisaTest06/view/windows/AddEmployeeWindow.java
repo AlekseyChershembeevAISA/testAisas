@@ -118,6 +118,7 @@ public class AddEmployeeWindow extends Window {
                         employeeDao.insertEmployee(employee);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+                        close();
                     }
                 } catch (NumberFormatException ex) {
                     logger.warning("Неверные данные компании " + ex);

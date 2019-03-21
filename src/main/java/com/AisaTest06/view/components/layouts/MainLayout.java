@@ -59,17 +59,17 @@ public class MainLayout extends VerticalLayout {
                         companyGrid.setItems(companyDao.selectAllCompanies());
                         addComponent(companyGrid);
                         removeComponent(employeeGrid);
-                        // tabSheet.setSelectedTab(tabCompany);
 
-                        logger.info("Выбран tabCompany");
+
+                      //  logger.info("Выбран tabCompany");
 
                     } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
                         employeeGrid.setItems(employeeDao.selectAllEmployees());
                         addComponent(employeeGrid);
                         removeComponent(companyGrid);
-                        //tabSheet.setSelectedTab(tabEmployee);
 
-                        logger.info("Выбран tabEmployee");
+
+                       // logger.info("Выбран tabEmployee");
                     }
                 });
 
@@ -80,14 +80,12 @@ public class MainLayout extends VerticalLayout {
                 companyGrid.setItems(companyDao.searchAllCompanies(searchField.getValue()));
                 addComponent(companyGrid);
                 removeComponent(employeeGrid);
-                // tabSheet.setSelectedTab(tabCompany);
 
                 logger.info("Выбран tabCompany с search " + searchField.getValue());
             } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
                 employeeGrid.setItems(employeeDao.searchAllEmployees(searchField.getValue()));
                 addComponent(employeeGrid);
                 removeComponent(companyGrid);
-                // tabSheet.setSelectedTab(tabEmployee);
 
                 logger.info("Выбран tabEmployee с search " + searchField.getValue());
             }

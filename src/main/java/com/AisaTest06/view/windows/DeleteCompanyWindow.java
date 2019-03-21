@@ -20,12 +20,14 @@ public class DeleteCompanyWindow extends Window {
     private static Logger logger = Logger.getLogger(DeleteCompanyWindow.class.getName());
 
     public DeleteCompanyWindow() {
+
         setStyleName("Удалить компанию");
         setWidth(270f, Unit.PIXELS);
         center();
         setClosable(true);
         setDraggable(false);
         setModal(true);
+
         //setResizeLazy(true);
 
         CompanyDao companyDao = new CompanyDaoImpl();
@@ -68,11 +70,15 @@ public class DeleteCompanyWindow extends Window {
                         companyDao.deleteCompany(listCompany.get(i).getCompanyId());
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
+                        close();
+
                         logger.info("компания успешно удалена " + listCompany.get(i));
                     } else {
                         logger.warning("Невозможно удалить компанию");
                     }
                 }
+
+
 
             });
 

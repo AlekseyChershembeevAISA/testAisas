@@ -5,10 +5,7 @@ import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CheckBoxGroup;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.ArrayList;
@@ -68,12 +65,14 @@ public class DeleteEmployeeWindow extends Window {
                         employeeDao.deleteEmployee(employeeArrayList.get(i).getEmployeeId());
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+                        close();
+
                         logger.info("сотрудник  успешно удален " + employeeArrayList.get(i));
                     } else {
                         logger.warning("Невозможно удалить сотрудника");
                     }
                 }
-
+                    close();
             });
 
         });

@@ -20,8 +20,6 @@ public class fieldsEmployee extends TextField {
     private TextField emailTextField;
 
 
-
-
     public TextField getFullName() {
         TextField fullName = new TextField("ФИО");
 

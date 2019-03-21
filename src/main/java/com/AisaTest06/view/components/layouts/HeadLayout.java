@@ -1,8 +1,9 @@
 package com.AisaTest06.view.components.layouts;
 
-import com.AisaTest06.entity.Company;
-import com.AisaTest06.entity.Employee;
-import com.AisaTest06.view.windows.*;
+import com.AisaTest06.view.windows.AddCompanyWindow;
+import com.AisaTest06.view.windows.AddEmployeeWindow;
+import com.AisaTest06.view.windows.DeleteCompanyWindow;
+import com.AisaTest06.view.windows.DeleteEmployeeWindow;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -28,17 +29,17 @@ class HeadLayout extends HorizontalLayout {
         Button deleteButton = new Button("Удалить");
         deleteButton.setStyleName(ValoTheme.BUTTON_DANGER);
         deleteButton.setIcon(VaadinIcons.MINUS);
-        Button editButton = new Button("Редактировать");
-        editButton.setEnabled(false);
-        editButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-        editButton.setIcon(VaadinIcons.EDIT);
+       // Button editButton = new Button("Редактировать");
+//        editButton.setEnabled(false);
+//        editButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+//        editButton.setIcon(VaadinIcons.EDIT);
         searchField = new TextField();
 
         searchField.setPlaceholder("поиск");
 
-
+       // hl.addComponents(addButton, editButton, deleteButton);
         HorizontalLayout hl = new HorizontalLayout();
-        hl.addComponents(addButton, editButton, deleteButton);
+        hl.addComponents(addButton,  deleteButton);
 
 
         addComponents(hl, searchField);
@@ -80,18 +81,18 @@ class HeadLayout extends HorizontalLayout {
         });
 
         //добавляем новое окошко для редактирования компании/сотрудника
-        editButton.addClickListener((Button.ClickListener) clickEvent -> {
-            if (tabSheet.getSelectedTab().equals(tabCompany)) {
-                EditCompanyWindow editComWindow = new EditCompanyWindow(new Company());
-                UI.getCurrent().addWindow(editComWindow);
-
-
-            } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
-                EditEmployeeWindow editWindow = new EditEmployeeWindow(new Employee());
-                UI.getCurrent().addWindow(editWindow);
-
-            }
-        });
+//        editButton.addClickListener((Button.ClickListener) clickEvent -> {
+//            if (tabSheet.getSelectedTab().equals(tabCompany)) {
+//                EditCompanyWindow editComWindow = new EditCompanyWindow(new Company());
+//                UI.getCurrent().addWindow(editComWindow);
+//
+//
+//            } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
+//                EditEmployeeWindow editWindow = new EditEmployeeWindow(new Employee());
+//                UI.getCurrent().addWindow(editWindow);
+//
+//            }
+//        });
 
 
     }

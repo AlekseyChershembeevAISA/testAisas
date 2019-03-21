@@ -30,7 +30,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     "VALUES(:fullname,:birthdate,:email,:companyid,:namecompany)";
 
     @Override
-    public Employee insertEmployee(Employee employee) {
+    public void insertEmployee(Employee employee) {
 
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -46,11 +46,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
             logger.info("Успешно добавлен новый сотрудник " + employee.getFullName());
 
-            return employee;
+
 
         } catch (DataAccessException d) {
             logger.warning("Ошибка при добавлении нового сотрудника " + d);
-            return null;
+
         }
     }
 
@@ -63,7 +63,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     "WHERE employeeid=:employeeid";
 
     @Override
-    public Employee editEmployee(Employee employee) {
+    public void editEmployee(Employee employee) {
 
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -82,10 +82,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
             logger.info("Успешно изменен сотрудник " + employee.getEmployeeId() + " " + employee.getFullName());
 
-            return employee;
+
         } catch (DataAccessException d) {
             logger.warning("Ошибка при изменении сотрудника " + d);
-            return null;
+
         }
 
     }
@@ -95,7 +95,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     "WHERE employeeid=:employeeid";
 
     @Override
-    public int deleteEmployee(int employeeid) {
+    public void deleteEmployee(int employeeid) {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         int result;
@@ -107,10 +107,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
             logger.info("Успешно удален сотрудник " + employeeid + " ");
 
-            return result;
+
         } catch (DataAccessException d) {
             logger.warning("Ошибка при удалении сотрудника " + d);
-            return 0;
+
         }
 
 

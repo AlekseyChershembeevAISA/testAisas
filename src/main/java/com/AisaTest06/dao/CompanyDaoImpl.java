@@ -29,7 +29,7 @@ public class CompanyDaoImpl implements CompanyDao {
                     "VALUES(:name,:nip,:address,:phone) ";
 
     @Override
-    public Company insertCompany(Company company) {
+    public void insertCompany(Company company) {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         try {
@@ -42,11 +42,11 @@ public class CompanyDaoImpl implements CompanyDao {
             jdbcTemplate.update(DAO_INSERT_COMPANY, parameters);
 
             logger.info("Успешно добавлена новая компания " + company.getCompanyId() + " " + company.getName());
-            return company;
+
 
         } catch (DataAccessException d) {
             logger.warning("Ошибка при добавлении новой компании " + d);
-            return null;
+
         }
     }
 
@@ -59,7 +59,7 @@ public class CompanyDaoImpl implements CompanyDao {
                     "WHERE companyid=:companyid";
 
     @Override
-    public Company editCompany(Company company) {
+    public void editCompany(Company company) {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         try {
@@ -73,15 +73,12 @@ public class CompanyDaoImpl implements CompanyDao {
             jdbcTemplate.update(DAO_EDIT_COMPANY, parameters);
 
             logger.info("Успешно изменена компания " + company.getCompanyId() + " " + company.getName());
-            return company;
+
 
         } catch (DataAccessException d) {
             System.out.println("Ошибка при изменении компании " + d);
-            return null;
 
         }
-
-
     }
 
     private static final String DAO_DELETE_COMPANY =
@@ -89,7 +86,7 @@ public class CompanyDaoImpl implements CompanyDao {
                     "WHERE companyid=:companyid";
 
     @Override
-    public int deleteCompany(int companyid) {
+    public void deleteCompany(int companyid) {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         int result;
@@ -101,12 +98,11 @@ public class CompanyDaoImpl implements CompanyDao {
 
             logger.info("Успешно удалена компания " + companyid);
 
-            return result;
+
         } catch (DataAccessException d) {
             logger.warning("Ошибка при удалении компании " + d);
-            return 0;
-        }
 
+        }
     }
 
     private static final String DAO_SELECT_ALL_COMPANIES =

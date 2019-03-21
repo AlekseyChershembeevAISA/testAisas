@@ -8,12 +8,12 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public interface EmployeeDao {
 
-    Employee insertEmployee(Employee employee);
+    void insertEmployee(Employee employee);
 
-    Employee editEmployee(Employee employee);
+    void editEmployee(Employee employee);
 
     //будем удалять по id
-    int deleteEmployee(int employeeid);
+    void deleteEmployee(int employeeid);
 
     List<Employee> selectAllEmployees();
 

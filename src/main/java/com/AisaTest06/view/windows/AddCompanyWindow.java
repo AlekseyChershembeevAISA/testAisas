@@ -108,6 +108,7 @@ public class AddCompanyWindow extends Window {
                         companyDao.insertCompany(company);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
+                        close();
 
                     }
 
@@ -130,6 +131,8 @@ public class AddCompanyWindow extends Window {
 
     }
 }
+
+
 
 
 

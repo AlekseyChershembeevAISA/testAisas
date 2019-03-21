@@ -2,7 +2,7 @@ package com.AisaTest06.entity;
 
 import java.util.Objects;
 
-@SuppressWarnings("ALL")
+//@SuppressWarnings("ALL")
 public class Company {
     private int companyId;
     private String name;

@@ -114,6 +114,7 @@ public class EditCompanyWindow extends Window {
                     companyDao.editCompany(company);
                     MainLayout.tabSheet.setSelectedTab(tabEmployee);
                     MainLayout.tabSheet.setSelectedTab(tabCompany);
+                    close();
                 } else {
                         fieldsCompany.check(nameField);
                         fieldsCompany.check(nipField);
