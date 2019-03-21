@@ -1,4 +1,4 @@
-package com.AisaTest06.dao.dao.Interfaces;
+package com.AisaTest06.dao.dao.interfaces;
 
 import com.AisaTest06.entity.Company;
 

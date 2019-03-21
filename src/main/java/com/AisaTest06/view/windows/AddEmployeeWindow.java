@@ -3,12 +3,12 @@ package com.AisaTest06.view.windows;
 
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.EmployeeDaoImpl;
-import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
-import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
+import com.AisaTest06.dao.dao.interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textFields.fieldsEmployee;
+import com.AisaTest06.view.components.textfields.fieldsEmployee;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -118,6 +118,7 @@ public class AddEmployeeWindow extends Window {
                         employeeDao.insertEmployee(employee);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
                         MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+
                         close();
                     }
                 } catch (NumberFormatException ex) {

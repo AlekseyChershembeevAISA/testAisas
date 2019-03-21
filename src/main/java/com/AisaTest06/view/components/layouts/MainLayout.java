@@ -2,8 +2,8 @@ package com.AisaTest06.view.components.layouts;
 
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.EmployeeDaoImpl;
-import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
-import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
+import com.AisaTest06.dao.dao.interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.grids.Grids;
@@ -34,7 +34,6 @@ public class MainLayout extends VerticalLayout {
 
         tabSheet.addTab(tabCompany, "Компании");
         tabSheet.addTab(tabEmployee, "Сотрудники");
-        // tabSheet.setSelectedTab(tabCompany);
 
         HeadLayout headLayout = new HeadLayout();
 
@@ -61,15 +60,11 @@ public class MainLayout extends VerticalLayout {
                         removeComponent(employeeGrid);
 
 
-                      //  logger.info("Выбран tabCompany");
-
                     } else if (tabSheet.getSelectedTab().equals(tabEmployee)) {
                         employeeGrid.setItems(employeeDao.selectAllEmployees());
                         addComponent(employeeGrid);
                         removeComponent(companyGrid);
 
-
-                       // logger.info("Выбран tabEmployee");
                     }
                 });
 

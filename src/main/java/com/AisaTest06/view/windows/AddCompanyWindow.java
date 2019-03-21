@@ -2,10 +2,10 @@ package com.AisaTest06.view.windows;
 
 
 import com.AisaTest06.dao.CompanyDaoImpl;
-import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textFields.fieldsCompany;
+import com.AisaTest06.view.components.textfields.fieldsCompany;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
@@ -86,6 +86,7 @@ public class AddCompanyWindow extends Window {
 
         phone.addValueChangeListener(valueChangeEvent ->
                 PhoneArr[0] = valueChangeEvent.getValue());
+
 
         addCompany.addClickListener((Button.ClickListener) clickEvent6 -> {
             Company company;

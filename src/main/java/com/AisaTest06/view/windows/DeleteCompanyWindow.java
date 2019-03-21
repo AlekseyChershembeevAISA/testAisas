@@ -1,7 +1,7 @@
 package com.AisaTest06.view.windows;
 
 import com.AisaTest06.dao.CompanyDaoImpl;
-import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
 import com.vaadin.icons.VaadinIcons;

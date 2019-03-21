@@ -1,13 +1,16 @@
 package com.AisaTest06.dao;
 
-import com.AisaTest06.dao.dao.Interfaces.EmployeeDao;
+import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
+import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.dao.data.source.config.DataSourceConfiguration;
 import com.AisaTest06.dao.row.mappers.EmployeeRowMapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -46,8 +49,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
             logger.info("Успешно добавлен новый сотрудник " + employee.getFullName());
 
-
-
         } catch (DataAccessException d) {
             logger.warning("Ошибка при добавлении нового сотрудника " + d);
 
@@ -56,7 +57,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     private static String DAO_EDIT_EMPLOYEE =
             "UPDATE employees " +
-                    "SET fullname=:fullname," +
+                    "SET" +
+                    " fullname=:fullname," +
                     "birthdate=:birthdate," +
                     "email=:email," +
                     "namecompany=:namecompany " +
@@ -76,11 +78,37 @@ public class EmployeeDaoImpl implements EmployeeDao {
             parameters.addValue("companyid", employee.getCompanyId());
             parameters.addValue("namecompany", employee.getNameCompany());
 
-
-
             jdbcTemplate.update(DAO_EDIT_EMPLOYEE, parameters);
 
             logger.info("Успешно изменен сотрудник " + employee.getEmployeeId() + " " + employee.getFullName());
+
+
+        } catch (DataAccessException d) {
+            logger.warning("Ошибка при изменении сотрудника " + d);
+
+        }
+
+    }
+
+    private static String DAO_EDIT_EMPLOYEE_COMPANYNAME =
+            "UPDATE employees " +
+                    "SET " +
+                    "namecompany=:namecompany " +
+                    "WHERE companyid=:companyid";
+
+    @Override
+    public void editEmployeeName(Company company) {
+
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+        try {
+            parameters.addValue("companyid",company.getCompanyId());
+            parameters.addValue("namecompany", company.getName());
+
+            jdbcTemplate.update(DAO_EDIT_EMPLOYEE_COMPANYNAME, parameters);
+
+            logger.info("Успешно изменена компания сотрудника") ;
 
 
         } catch (DataAccessException d) {
@@ -123,7 +151,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public List<Employee> selectAllEmployees() {
         List<Employee> listAllEmployees;
-
 
         try {
             listAllEmployees = jdbcTemplate.query(DAO_SELECT_ALL_EMPLOYEES, new EmployeeRowMapper());
@@ -182,6 +209,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             return null;
         }
     }
+
+
 
 
 }

@@ -1,6 +1,6 @@
 package com.AisaTest06.dao;
 
-import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.dao.data.source.config.DataSourceConfiguration;
 import com.AisaTest06.dao.row.mappers.CompanyRowMapper;
@@ -125,7 +125,6 @@ public class CompanyDaoImpl implements CompanyDao {
             logger.warning("Ошибка при добавлении компаний " + d);
             return null;
         }
-
 
     }
 

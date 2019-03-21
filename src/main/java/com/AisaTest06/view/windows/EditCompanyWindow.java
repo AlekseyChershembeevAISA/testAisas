@@ -1,10 +1,12 @@
 package com.AisaTest06.view.windows;
 
 import com.AisaTest06.dao.CompanyDaoImpl;
-import com.AisaTest06.dao.dao.Interfaces.CompanyDao;
+import com.AisaTest06.dao.EmployeeDaoImpl;
+import com.AisaTest06.dao.dao.interfaces.CompanyDao;
+import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textFields.fieldsCompany;
+import com.AisaTest06.view.components.textfields.fieldsCompany;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
@@ -18,8 +20,6 @@ import static com.AisaTest06.view.components.layouts.MainLayout.*;
 public class EditCompanyWindow extends Window {
 
     private static Logger logger = Logger.getLogger(EditCompanyWindow.class.getName());
-
-
 
 
     public EditCompanyWindow(Company company) {
@@ -36,6 +36,7 @@ public class EditCompanyWindow extends Window {
 
 
         CompanyDao companyDao = new CompanyDaoImpl();
+        EmployeeDao employeeDao = new EmployeeDaoImpl();
 
         Button editCompany = new Button("Редактировать");
         editCompany.setSizeFull();
@@ -95,7 +96,7 @@ public class EditCompanyWindow extends Window {
                 phoneArr[0] = valueChangeEvent.getValue());
 
 
-        editWindowLayout.addComponents( nameField, addressField, nipField, phoneField, editCompany,cancel);
+        editWindowLayout.addComponents(nameField, addressField, nipField, phoneField, editCompany, cancel);
 
 
         editCompany.addClickListener((Button.ClickListener) clickEvent15 -> {
@@ -108,23 +109,30 @@ public class EditCompanyWindow extends Window {
                 company.setAddress(addressArr[0]);
                 company.setPhone(Long.parseLong(phoneArr[0]));
 
-                if (!(nameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
+                if (companyDao.checkCompanyByName(company.getName())) {
+                    logger.warning("Компания с таким именем уже существует " + company.getName());
+
+                } else if (!(nameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
                         addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
 
                     companyDao.editCompany(company);
+                    ((EmployeeDaoImpl) employeeDao).editEmployeeName(company);
+
+
+
                     MainLayout.tabSheet.setSelectedTab(tabEmployee);
                     MainLayout.tabSheet.setSelectedTab(tabCompany);
                     close();
                 } else {
-                        fieldsCompany.check(nameField);
-                        fieldsCompany.check(nipField);
-                        fieldsCompany.check(addressField);
-                        fieldsCompany.check(phoneField);
+                    fieldsCompany.check(nameField);
+                    fieldsCompany.check(nipField);
+                    fieldsCompany.check(addressField);
+                    fieldsCompany.check(phoneField);
                     logger.warning("Неверные данные компании " + company);
 
                 }
             } catch (NumberFormatException ex) {
-                logger.warning("Неверная редакция компании " + ex + " "+company);
+                logger.warning("Неверная редакция компании " + ex + " " + company);
             } catch (NullPointerException ex) {
                 logger.warning("NPE компании " + company + " " + ex);
             }
@@ -132,10 +140,6 @@ public class EditCompanyWindow extends Window {
 
 
     }
-
-
-
-
 
 }
 
