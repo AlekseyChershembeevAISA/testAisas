@@ -11,6 +11,9 @@ public class EmployeeRowMapper implements RowMapper {
     /**
     Сопоставляем данные каждой строки сотрудника
    **/
+    /*
+    Можно использовать вместо new BeanPropertyRowMapper(Employee.class);
+    */
     @Override
     public Object mapRow(ResultSet rs, int i) throws SQLException {
         Employee employee = new Employee();

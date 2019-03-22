@@ -34,7 +34,7 @@ public interface CompanyDao {
     List<Company> searchAllCompanies(String search);
     /**
     Интерфейс для 
-    проверки компании
+    проверки компании по имени компании
     **/
     boolean checkCompanyByName(String name);
 }

@@ -9,10 +9,10 @@ import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textfields.fieldsEmployee;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import java.lang.String;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -38,22 +38,21 @@ public class AddEmployeeWindow extends Window {
         center();
         setClosable(true);
         setDraggable(false);
-        //setResizeLazy(true);
+        setResizeLazy(false);
 
         setStyleName("Добавить нового сотрудника");
 
         List<Company> companyList = companyDao.selectAllCompanies();
 
         ComboBox<Company> selectAllCompanies = new ComboBox<>("Выбрать компанию");
-
-
-
         selectAllCompanies.setItems(companyList);
         selectAllCompanies.setItemCaptionGenerator(Company::getName);
         selectAllCompanies.setEmptySelectionAllowed(false);
+        selectAllCompanies.setWidth(78,Unit.PERCENTAGE);
 
         Button addEmployee = new com.vaadin.ui.Button("Добавить");
-        addEmployee.setSizeFull();
+        addEmployee.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+
         addEmployee.setStyleName(ValoTheme.BUTTON_PRIMARY);
         addEmployee.setIcon(VaadinIcons.INSERT);
 
@@ -74,7 +73,9 @@ public class AddEmployeeWindow extends Window {
         final String[] companyNameArr = {""};
         final int[] companyId = {0};
 
-
+        /*
+        Заполяем данные Id Компании и Именя компании констант из комбобокса
+        */
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
             companyId[0] = valueChangeEvent.getValue().getCompanyId();
             companyNameArr[0] = valueChangeEvent.getValue().getName();
@@ -89,18 +90,26 @@ public class AddEmployeeWindow extends Window {
         dateField.setRequiredIndicatorVisible(true);
         emailField.setRequiredIndicatorVisible(true);
 
-
+        /*
+        Заполняем константу имени сотрудника из поля
+        */
         fullNameTextField.addValueChangeListener(valueChangeEvent ->
                 fullNameArr[0] = valueChangeEvent.getValue()
         );
-
+        /*
+        Заполняем константу даты рождения сотрудника из поля
+        */
         dateField.addValueChangeListener(valueChangeEvent ->
                 dateFieldArr[0] = String.valueOf(valueChangeEvent.getValue()));
-
+        /*
+        Заполняем константу email сотрудника из поля
+        */
         emailField.addValueChangeListener(valueChangeEvent ->
                 emailArr[0] = valueChangeEvent.getValue());
 
-
+        /*
+         Добавляем сотрудника, если заполнены все поля
+        */
         addEmployee.addClickListener((Button.ClickListener) clickEvent6 -> {
 
             if (!((fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty()

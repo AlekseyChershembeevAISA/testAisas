@@ -11,6 +11,9 @@ public class CompanyRowMapper implements RowMapper {
     /**
     Сопоставляем данные каждой строки компании
     **/
+    /*
+    Можно использовать вместо  new BeanPropertyRowMapper(Company.class);
+    */
     @Override
     public Object mapRow(ResultSet rs, int i) throws SQLException {
         Company company = new Company();

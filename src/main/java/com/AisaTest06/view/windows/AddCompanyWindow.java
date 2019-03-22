@@ -6,6 +6,7 @@ import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textfields.fieldsCompany;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
@@ -14,6 +15,7 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.logging.Logger;
+
 
 @SuppressWarnings("ALL")
 public class AddCompanyWindow extends Window {
@@ -24,6 +26,7 @@ public class AddCompanyWindow extends Window {
     public AddCompanyWindow() {
 
         Button addCompany = new Button("Добавить");
+        addCompany.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
 
         setWidth(420f, Unit.PIXELS);
@@ -36,7 +39,7 @@ public class AddCompanyWindow extends Window {
         setClosable(true);
         setDraggable(false);
         setModal(true);
-        //setResizeLazy(true);
+        setResizeLazy(false);
 
         CompanyDao companyDao = new CompanyDaoImpl();
 
@@ -73,21 +76,31 @@ public class AddCompanyWindow extends Window {
         address.setRequiredIndicatorVisible(true);
         phone.setRequiredIndicatorVisible(true);
 
-
+        /*
+        Заполняем пеменные из поля Имя компании
+        */
         nameTextField.addValueChangeListener(valueChangeEvent ->
                 companyNameArr[0] = valueChangeEvent.getValue()
         );
-
+         /*
+        Заполняем пеменные из поля ИНН компании
+        */
         nipTextField.addValueChangeListener(valueChangeEvent ->
                 NIPArr[0] = valueChangeEvent.getValue());
-
+        /*
+        Заполняем пеменные из поля Адрес компании
+        */
         address.addValueChangeListener(valueChangeEvent ->
                 AddressArr[0] = valueChangeEvent.getValue());
-
+         /*
+        Заполняем пеменные из поля Телефон компании
+        */
         phone.addValueChangeListener(valueChangeEvent ->
                 PhoneArr[0] = valueChangeEvent.getValue());
 
-
+         /*
+         Добавляем компанию, если такой нет в БД и если заполнены все поля
+        */
         addCompany.addClickListener((Button.ClickListener) clickEvent6 -> {
             Company company;
 

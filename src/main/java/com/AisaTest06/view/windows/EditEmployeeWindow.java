@@ -6,6 +6,7 @@ import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textfields.fieldsEmployee;
 import com.vaadin.data.HasValue;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -29,6 +30,7 @@ public class EditEmployeeWindow extends Window {
         setContent(editVerticalLayout);
         setWidth(400f, Unit.PIXELS);
         setHeight(350f, Unit.PIXELS);
+        setResizeLazy(false);
 
         fieldsEmployee fieldsEmployee = new fieldsEmployee();
         TextField fullName = fieldsEmployee.getFullName();
@@ -46,6 +48,7 @@ public class EditEmployeeWindow extends Window {
         final String[] companyNameArr = {employee.getNameCompany()};
 
         Button editEmployee = new Button("Редактировать");
+        editEmployee.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         editEmployee.setSizeFull();
         editEmployee.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editEmployee.setIcon(VaadinIcons.EDIT);
@@ -65,7 +68,9 @@ public class EditEmployeeWindow extends Window {
 
         editVerticalLayout.addComponents(fullName, dateField,
                 email, editEmployee, cancel);
-
+         /*
+        Заполняем константу даты рождения сотрудника из поля
+        */
         dateField.addValueChangeListener(
                 (HasValue.ValueChangeListener<LocalDate>) valueChangeEvent -> {
                     LocalDate date = valueChangeEvent.getValue();
@@ -77,14 +82,24 @@ public class EditEmployeeWindow extends Window {
 
                 });
 
+        /*
+        Заполняем константу email сотрудника из поля
+        */
         email.addValueChangeListener(
                 (HasValue.ValueChangeListener<String>) valueChangeEvent ->
                         emailArr[0] = valueChangeEvent.getValue());
-
+        /*
+        Заполняем константу имени сотрудника из поля
+        */
         fullName.addValueChangeListener(
                 (HasValue.ValueChangeListener<String>) valueChangeEvent ->
                         fullNameArr[0] = valueChangeEvent.getValue());
 
+
+
+        /*
+         Редактируем сотрудника, если заполнены все поля
+        */
         editEmployee.addClickListener((Button.ClickListener) clickEvent13 -> {
 
             try {

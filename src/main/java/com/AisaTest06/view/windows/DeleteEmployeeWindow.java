@@ -4,6 +4,7 @@ import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -25,11 +26,12 @@ public class DeleteEmployeeWindow extends Window {
         setDraggable(false);
         setModal(true);
         setWidth(270f, Unit.PIXELS);
-        //setResizeLazy(true);
+        setResizeLazy(false);
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
 
         Button deleteEmployee = new Button("Удалить");
+        deleteEmployee.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         deleteEmployee.setSizeFull();
         deleteEmployee.setStyleName(ValoTheme.BUTTON_DANGER);
         deleteEmployee.setIcon(VaadinIcons.MINUS);
@@ -58,6 +60,10 @@ public class DeleteEmployeeWindow extends Window {
 
             ArrayList<Employee> employeeArrayList = new ArrayList<>(employeeSet);
 
+            /*
+             Удаляем выбранных сотрудников из комбобокса по ID сотрудника
+            */
+
             deleteEmployee.addClickListener(clickEvent -> {
 
                 for (int i = 0; i < employeeSet.size(); i++) {
@@ -72,7 +78,7 @@ public class DeleteEmployeeWindow extends Window {
                         logger.warning("Невозможно удалить сотрудника");
                     }
                 }
-                    close();
+                close();
             });
 
         });

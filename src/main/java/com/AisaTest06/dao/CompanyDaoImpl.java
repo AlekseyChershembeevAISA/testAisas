@@ -185,13 +185,11 @@ public class CompanyDaoImpl implements CompanyDao {
     public boolean checkCompanyByName(String name) {
 
         MapSqlParameterSource parametres = new MapSqlParameterSource();
-        parametres.addValue("name", name)
-        ;
+        parametres.addValue("name", name);
+
         try {
+            return jdbcTemplate.queryForObject(DAO_CHECK_COMPANY_BY_NAME, parametres, Boolean.class);
 
-            Integer count = jdbcTemplate.queryForObject(DAO_CHECK_COMPANY_BY_NAME, parametres, Integer.class);
-
-            return count > 0;
         } catch (DataAccessException ex) {
             logger.warning("Ошибка при проверке компании по имени " + ex);
             return false;

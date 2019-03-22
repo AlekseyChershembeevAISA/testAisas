@@ -7,6 +7,7 @@ import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
 import com.AisaTest06.view.components.textfields.fieldsCompany;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
@@ -33,12 +34,14 @@ public class EditCompanyWindow extends Window {
         setContent(editWindowLayout);
         setWidth(400f,Unit.PIXELS);
         setHeight(420,Unit.PIXELS);
+        setResizeLazy(false);
 
 
         CompanyDao companyDao = new CompanyDaoImpl();
         EmployeeDao employeeDao = new EmployeeDaoImpl();
 
         Button editCompany = new Button("Редактировать");
+        editCompany.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         editCompany.setSizeFull();
         editCompany.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editCompany.setIcon(VaadinIcons.EDIT);
@@ -81,24 +84,40 @@ public class EditCompanyWindow extends Window {
         addressField.setValue(company.getAddress());
         phoneField.setValue(String.valueOf(company.getPhone()));
 
-
+        /*
+        Заполняем пеменные из поля Имя компании
+        */
         nameField.addValueChangeListener(valueChangeEvent ->
                 nameArr[0] = valueChangeEvent.getValue()
         );
-
+         /*
+        Заполняем пеменные из поля ИНН компании
+        */
         nipField.addValueChangeListener(valueChangeEvent ->
                 NIPArr[0] = valueChangeEvent.getValue());
-
+        /*
+        Заполняем пеменные из поля Адрес компании
+        */
         addressField.addValueChangeListener(valueChangeEvent ->
                 addressArr[0] = valueChangeEvent.getValue());
-
+          /*
+        Заполняем пеменные из поля Телефон компании
+        */
         phoneField.addValueChangeListener(valueChangeEvent ->
                 phoneArr[0] = valueChangeEvent.getValue());
+        /*
+        Заполняем пеменные из поля Имя компании
+        */
+
+
 
 
         editWindowLayout.addComponents(nameField, addressField, nipField, phoneField, editCompany, cancel);
 
-
+         /*
+         Редактируем компанию, если такой нет в БД и если заполнены все поля
+         Редактируем у сотрудника название компании при изменении компании
+        */
         editCompany.addClickListener((Button.ClickListener) clickEvent15 -> {
 
             try {

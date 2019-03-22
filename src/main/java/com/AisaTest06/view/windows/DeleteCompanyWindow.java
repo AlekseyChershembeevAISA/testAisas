@@ -4,9 +4,11 @@ import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +30,13 @@ public class DeleteCompanyWindow extends Window {
         setDraggable(false);
         setModal(true);
 
-        //setResizeLazy(true);
+        setResizeLazy(false);
 
         CompanyDao companyDao = new CompanyDaoImpl();
 
 
         Button deleteCompanyButton = new Button("Удалить");
+        deleteCompanyButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         deleteCompanyButton.setSizeFull();
         deleteCompanyButton.setStyleName(ValoTheme.BUTTON_DANGER);
         deleteCompanyButton.setIcon(VaadinIcons.MINUS);
@@ -54,6 +57,9 @@ public class DeleteCompanyWindow extends Window {
         verticalLayout.addComponents(selectAllCompanies, deleteCompanyButton, cancelButton);
 
         setContent(verticalLayout);
+        /*
+         Удаляем выбранные компании из комбобокса по ID компании
+        */
 
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
 
