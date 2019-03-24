@@ -115,7 +115,7 @@ public class EditCompanyWindow extends Window {
         editWindowLayout.addComponents(nameField, addressField, nipField, phoneField, editCompany, cancel);
 
          /*
-         Редактируем компанию, если такой нет в БД и если заполнены все поля
+         Редактируем компанию, если такой нет в БД и если заполнены правильно все поля
          Редактируем у сотрудника название компании при изменении компании
         */
         editCompany.addClickListener((Button.ClickListener) clickEvent15 -> {
@@ -131,8 +131,10 @@ public class EditCompanyWindow extends Window {
                 if (companyDao.checkCompanyByName(company.getName())) {
                     logger.warning("Компания с таким именем уже существует " + company.getName());
 
-                } else if (!(nameArr[0].isEmpty() || NIPArr[0].isEmpty() ||
-                        addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
+                } else
+
+                    if (!(nameArr[0].isEmpty() ||( NIPArr[0].isEmpty()||NIPArr[0].length()<12)
+                            || addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
 
                     companyDao.editCompany(company);
                     ((EmployeeDaoImpl) employeeDao).editEmployeeName(company);

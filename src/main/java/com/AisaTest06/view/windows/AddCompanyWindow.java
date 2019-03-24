@@ -56,9 +56,9 @@ public class AddCompanyWindow extends Window {
 
         final int[] companyid = {0};
         final String[] companyNameArr = {""};
-        final String[] NIPArr = {""};
-        final String[] AddressArr = {""};
-        final String[] PhoneArr = {""};
+        final String[] nipArr = {""};
+        final String[] addressArr = {""};
+        final String[] phoneArr = {""};
 
         fieldsCompany fieldsCompany = new fieldsCompany();
         TextField nameTextField = fieldsCompany.getFullNameTextField();
@@ -86,31 +86,31 @@ public class AddCompanyWindow extends Window {
         Заполняем пеменные из поля ИНН компании
         */
         nipTextField.addValueChangeListener(valueChangeEvent ->
-                NIPArr[0] = valueChangeEvent.getValue());
+                nipArr[0] = valueChangeEvent.getValue());
         /*
         Заполняем пеменные из поля Адрес компании
         */
         address.addValueChangeListener(valueChangeEvent ->
-                AddressArr[0] = valueChangeEvent.getValue());
+                addressArr[0] = valueChangeEvent.getValue());
          /*
         Заполняем пеменные из поля Телефон компании
         */
         phone.addValueChangeListener(valueChangeEvent ->
-                PhoneArr[0] = valueChangeEvent.getValue());
+                phoneArr[0] = valueChangeEvent.getValue());
 
          /*
-         Добавляем компанию, если такой нет в БД и если заполнены все поля
+         Добавляем компанию, если такой нет в БД и если правильно заполнены все поля
         */
         addCompany.addClickListener((Button.ClickListener) clickEvent6 -> {
             Company company;
 
-            if (!(companyNameArr[0].isEmpty() || NIPArr[0].isEmpty()
-                    || AddressArr[0].isEmpty() || PhoneArr[0].isEmpty())) {
+            if (!(companyNameArr[0].isEmpty() ||( nipArr[0].isEmpty()||nipArr[0].length()<12)
+                    || addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
 
                 try {
 
-                    company = new Company(companyid[0], companyNameArr[0], Long.parseLong(NIPArr[0])
-                            , AddressArr[0], Long.parseLong(PhoneArr[0]));
+                    company = new Company(companyid[0], companyNameArr[0], Long.parseLong(nipArr[0])
+                            , addressArr[0], Long.parseLong(phoneArr[0]));
 
                     if
                     (companyDao.checkCompanyByName(company.getName())) {
@@ -138,7 +138,7 @@ public class AddCompanyWindow extends Window {
                 fieldsCompany.check(address);
                 fieldsCompany.check(phone);
                 logger.warning("Необходимо заполнить все данные компании " +
-                        companyNameArr[0] + " " + NIPArr[0] + " " + AddressArr[0] + " " + PhoneArr[0]);
+                        companyNameArr[0] + " " + nipArr[0] + " " + addressArr[0] + " " + phoneArr[0]);
             }
 
         });
